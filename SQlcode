@@ -1,0 +1,37 @@
+CREATE DATABASE myDatabase;
+GO
+
+USE myDatabase;
+GO
+
+CREATE TABLE Users (
+    user_id INT IDENTITY(1,1) PRIMARY KEY,
+    name NVARCHAR(50) NOT NULL,
+    email NVARCHAR(100) NOT NULL,
+    address NVARCHAR(100),
+    phoneNumber NVARCHAR(15),
+    user_name NVARCHAR(50),
+    role NVARCHAR(20) DEFAULT 'User'
+);
+
+INSERT INTO Users (name, email, address, phoneNumber, user_name, role)
+VALUES 
+('Tom', 'tomg@gmail.com', '213 Tin Street', '2035558080', 'TomtheGreat', 'Admin'),
+('BEN', 'benJ@gmail.com', '65 Hill Street', '4754546969', 'Ben10n', 'User'),
+('JIM', 'jimh@yahoo.com', '87 Jill Street', '2035648989', 'Superman1212', 'User');
+
+CREATE TABLE Admins (
+    admin_id INT IDENTITY(1,1) PRIMARY KEY,
+    user_id INT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES Users(user_id)
+);
+
+Add Admins (Tom only, user_id = 1)
+INSERT INTO Admins (user_id) VALUES (1);
+
+INSERT INTO Users (name, email, address, phoneNumber, user_name, role)
+VALUES 
+('Alice', 'alice@gmail.com', '45 Green Street', '5551234567', 'AliceWonder', 'User'),
+('Bob', 'bob@yahoo.com', '12 Maple Ave', '5559876543', 'BobTheBuilder', 'User');
+
+
