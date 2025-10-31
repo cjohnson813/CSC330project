@@ -35,6 +35,7 @@ function errorHandler(message) {
 	alert("Error: "+message);
 }
 
+//make sure that the none of the required fields for creating an event are empty
 function inputValidation()
 {
     if (!eventName.value || !eventDate.value || !eventTime.value)

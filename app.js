@@ -46,3 +46,9 @@ function sendResponse(status, message, contentType, res)
 	res.write(message);
 	res.end();
 }
+
+//validate the date and time inputs from the user, client side makes sure that fields are not empty
+function inputValidation(query, res)
+{
+
+}
