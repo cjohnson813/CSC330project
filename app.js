@@ -46,3 +46,5 @@ function sendResponse(status, message, contentType, res)
 	res.write(message);
 	res.end();
 }
+
+myserver.listen(80);//listen on port 80
