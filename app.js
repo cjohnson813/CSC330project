@@ -1,6 +1,5 @@
 const http = require('http');
 const url = require('url');
-const fs = require('fs');
 const fileUtils = require('./fileUtils.js');
 const sendFile = fileUtils.sendFile;
 
@@ -13,6 +12,15 @@ let myserver = http.createServer(requestHandler);
 
 //function to handle requests
 function requestHandler(req, res) {
+    let parsedURL = url.parse(req.url,true); 
+    let pathName = parsedURL.pathname;
+    let query = parsedURL.query;
+    let fileName = "." + '/public_html' + pathName;
+    //route the request for empty pathname
+    if (pathName == '/')
+    {
+        fileName = "./public_html/index.html";
+    }
     const parsedURL = url.parse(req.url,true); 
     const pathName = parsedURL.pathname;
     const query = parsedURL.query;
@@ -52,4 +60,5 @@ function sendResponse(status, message, contentType, res)
 	res.end();
 }
 
+fileUtils.setResponseHandler(sendResponse);
 myserver.listen(80);//listen on port 80
