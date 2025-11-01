@@ -13,10 +13,10 @@ let myserver = http.createServer(requestHandler);
 
 //function to handle requests
 function requestHandler(req, res) {
-    let parsedURL = url.parse(req.url,true); 
-    let pathName = parsedURL.pathname;
-    let query = parsedURL.query;
-    const fileName = "." + '/public_html/' + pathName;
+    const parsedURL = url.parse(req.url,true); 
+    const pathName = parsedURL.pathname;
+    const query = parsedURL.query;
+    let fileName = "." + '/public_html/' + pathName;
 	//route the request for empty pathname
 	if (pathname == '/')
 	{
