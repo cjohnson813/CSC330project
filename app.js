@@ -51,6 +51,7 @@ function sendResponse(status, message, contentType, res)
 	res.end();
 }
 
+fileUtils.setResponseHandler(sendResponse);
 myserver.listen(80);//listen on port 80
 
 module.exports = {sendResponse};

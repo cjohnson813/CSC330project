@@ -1,6 +1,11 @@
 const fs = require('fs');
 const path = require('path');
-const sendResponse = require('./app.js').sendResponse;
+
+let sendResponse;
+function setResponseHandler(sendResponseFunc)
+{
+	sendResponse = sendResponseFunc;
+}
 function sendFile(fileName, res)
 {
     const ext = path.extname(fileName);
@@ -45,5 +50,6 @@ function setContentType(fileName)
 
 module.exports = {
     sendFile: sendFile, 
-    setContentType: setContentType
+    setContentType: setContentType,
+	setResponseHandler: setResponseHandler
 };
