@@ -21,6 +21,15 @@ function requestHandler(req, res) {
     {
         fileName = "./public_html/index.html";
     }
+    const parsedURL = url.parse(req.url,true); 
+    const pathName = parsedURL.pathname;
+    const query = parsedURL.query;
+    let fileName = "." + '/public_html/' + pathName;
+	//route the request for empty pathname
+	if (pathName == '/')
+	{
+		fileName = "./public_html/index.html";
+	}
     switch (pathName)
     {
         case '/requestEvent':
@@ -53,5 +62,3 @@ function sendResponse(status, message, contentType, res)
 
 fileUtils.setResponseHandler(sendResponse);
 myserver.listen(80);//listen on port 80
-
-module.exports = {sendResponse};
