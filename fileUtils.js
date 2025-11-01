@@ -1,4 +1,6 @@
+const fs = require('fs');
 const path = require('path');
+const sendResponse = require('./app.js').sendResponse;
 function sendFile(fileName, res)
 {
     const ext = path.extname(fileName);

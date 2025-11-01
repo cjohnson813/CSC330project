@@ -1,6 +1,5 @@
-const hhtp = require('http');
+const http = require('http');
 const url = require('url');
-const fs = require('fs');
 const fileUtils = require('./fileUtils.js');
 const sendFile = fileUtils.sendFile;
 
@@ -16,7 +15,12 @@ function requestHandler(req, res) {
     let parsedURL = url.parse(req.url,true); 
     let pathName = parsedURL.pathname;
     let query = parsedURL.query;
-    const fileName = "." + pathName;
+    let fileName = "." + '/public_html' + pathName;
+    //route the request for empty pathname
+    if (pathName == '/')
+    {
+        fileName = "./public_html/index.html";
+    }
     switch (pathName)
     {
         case '/requestEvent':
@@ -46,3 +50,7 @@ function sendResponse(status, message, contentType, res)
 	res.write(message);
 	res.end();
 }
+
+myserver.listen(80);//listen on port 80
+
+module.exports = {sendResponse};
