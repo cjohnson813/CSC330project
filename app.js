@@ -16,7 +16,12 @@ function requestHandler(req, res) {
     let parsedURL = url.parse(req.url,true); 
     let pathName = parsedURL.pathname;
     let query = parsedURL.query;
-    const fileName = "." + pathName;
+    const fileName = "." + '/public_html/' + pathName;
+	//route the request for empty pathname
+	if (pathname == '/')
+	{
+		fileName = "./public_html/index.html";
+	}
     switch (pathName)
     {
         case '/requestEvent':
