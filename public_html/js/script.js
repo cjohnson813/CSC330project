@@ -126,10 +126,11 @@ class Calendar {
     }
 }
 
-// load the calendar when the page is loaded
 document.addEventListener('DOMContentLoaded', () => {
+    // Load calender when page is loaded
     new Calendar();
 
+    // View and schedule event buttons
 	const viewBtn = document.getElementById('viewBtn');
 	const scheduleBtn = document.getElementById('scheduleBtn');
 
