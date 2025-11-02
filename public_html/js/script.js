@@ -129,4 +129,23 @@ class Calendar {
 // load the calendar when the page is loaded
 document.addEventListener('DOMContentLoaded', () => {
     new Calendar();
+
+	const viewBtn = document.getElementById('viewBtn');
+	const scheduleBtn = document.getElementById('scheduleBtn');
+
+	if (viewBtn)
+	{
+		viewBtn.addEventListener('click', () =>
+		{
+			window.location.href = 'viewEvents.html';
+		});
+	}
+
+	if (scheduleBtn)
+	{
+		scheduleBtn.addEventListener('click', () =>
+		{
+			window.location.href = 'scheduleEvent.html';
+		});
+	}
 });
