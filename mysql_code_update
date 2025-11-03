@@ -1,0 +1,52 @@
+
+CREATE DATABASE myDatabase;
+USE myDatabase;
+
+
+CREATE TABLE Users (
+    user_id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    address VARCHAR(100),
+    phoneNumber VARCHAR(15),
+    user_name VARCHAR(50),
+    role VARCHAR(20) DEFAULT 'User'
+);
+
+
+INSERT INTO Users (name, email, address, phoneNumber, user_name, role)
+VALUES 
+('Tom', 'tomg@gmail.com', '213 Tin Street', '2035558080', 'TomtheGreat', 'Admin'),
+('BEN', 'benJ@gmail.com', '65 Hill Street', '4754546969', 'Ben10n', 'User'),
+('JIM', 'jimh@yahoo.com', '87 Jill Street', '2035648989', 'Superman1212', 'User');
+
+
+CREATE TABLE Admins (
+    admin_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES Users(user_id)
+);
+
+
+INSERT INTO Admins (user_id) VALUES (1);
+
+
+INSERT INTO Users (name, email, address, phoneNumber, user_name, role)
+VALUES 
+('Alice', 'alice@gmail.com', '45 Green Street', '5551234567', 'AliceWonder', 'User'),
+('Bob', 'bob@yahoo.com', '12 Maple Ave', '5559876543', 'BobTheBuilder', 'User');
+
+ALTER TABLE Users
+ADD COLUMN password VARCHAR(255) NOT NULL DEFAULT 'changeme';
+
+
+UPDATE Users
+SET password = CASE user_id
+    WHEN 1 THEN 'TomPass123!'
+    WHEN 2 THEN 'BenJ_2025'
+    WHEN 3 THEN 'JimHero!'
+    WHEN 4 THEN 'Alice@Wonder'
+    WHEN 5 THEN 'BobBuilds#1'
+    ELSE 'DefaultPass'
+END;
+
