@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content=""width=devicewidth, initial-scale="1.0">
+    <title>CS Marketplace</title>
+    <link rel="stylesheet" href="./css/styles.css">
+</head>
+
+<body>
+    <header class="header">
+        <div class="header-content">
+            <h1 class="logo">CS Marketplace</h1>
+            <nav class="nav-buttons">
+                <button class="nav-btn" id="loginBtn">Login/Sign Up</button>
+                <button class="nav-btn" id="contactBtn">Contact Us</button>
+                <button class="nav-btn" id="joinBtn">Join Group</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class=""main-content">
+        <div class="calendar-container">
+            <div class="calendar-header">
+                <button class="calendar-nav-btn" id="previousMonth">Previous</button>
+                <h2 class="calendar-title" id="monthYear"></h2>
+                <button class="calendar-nav-btn" id="nextMonth">Next</button>
+            </div>
+
+            <div class="calendar-grid">
+                <div class="calendar-weekdays">
+                    <div class="weekday">Sunday</div>
+                    <div class="weekday">Monday</div>
+                    <div class="weekday">Tuesday</div>
+                    <div class="weekday">Wednesday</div>
+                    <div class="weekday">Thursday</div>
+                    <div class="weekday">Friday</div>
+                    <div class="weekday">Saturday</div>
+                </div>
+                <div class="calendar-days" id="calendarDays"></div>
+            </div>
+        </div>
+    </main>
+
+    <script src="./js/script.js"></script>
+
+</body>
+</html>
