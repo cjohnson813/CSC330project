@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content=""width=devicewidth, initial-scale="1.0">
     <title>CS Marketplace - Admin</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 
 <body>
@@ -15,7 +15,30 @@
                 <button class="nav-btn" id="viewProfileBtn">View Profile</button>
                 <button class="nav-btn" id="contactBtn"></button>
                 <button class="nav-btn" id="joinBtn">Join Group</button>
+                <button class="nav-btn" id="joinBtn">View Inbox</button>
+                <button class="nav-btn" id="joinBtn">Logout</button>
             </nav>
         </div>
     </header>
+
+        <!-- Inbox Modal -->
+    <div id="inboxModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Event Requests Inbox</h2>
+                <span class="close" id="closeInbox">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div id="inboxContainer">
+                    <p id="loadingMessage">Loading requests...</p>
+                    <div id="requestsList"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
+
+    
 
