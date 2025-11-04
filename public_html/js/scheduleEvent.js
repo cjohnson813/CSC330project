@@ -4,9 +4,10 @@ document.addEventListener('DOMContentLoaded', () =>
 
     form.addEventListener('submit', async (event) => 
     {
+        // Prevent default action, proceed with following code
         event.preventDefault();
 
-        // Form data
+        // Collect form data
         const name = document.getElementById('eventName').value;
         const date = document.getElementById('eventDate').value;
         const location = document.getElementById('eventLocation').value;
