@@ -2,9 +2,6 @@
 
 function approveEvent(eventId)
 {
-    const eventName = document.getElementById("event_name-" + eventId).textContent;
-    const eventDate = document.getElementById("event_date-"+ eventId).textContent;
-    const eventTime = document.getElementById("event_time-" + eventId).textContent;
     let AJAXObj = new XMLHttpRequest();
     AJAXObj.onload = function()
     {

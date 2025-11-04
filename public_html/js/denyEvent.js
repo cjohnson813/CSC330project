@@ -1,3 +1,4 @@
+//function to deny event creation
 function denyEvent(eventId) 
 {
     let AJAXObj = new XMLHttpRequest();
