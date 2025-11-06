@@ -51,5 +51,5 @@ function setContentType(fileName)
 module.exports = {
     sendFile: sendFile, 
     setContentType: setContentType,
-	setResponseHandler: setResponseHandler
+	  setResponseHandler: setResponseHandler
 };
