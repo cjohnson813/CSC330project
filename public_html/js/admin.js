@@ -1,0 +1,51 @@
+document.getElementById("viewRequestsBtn").addEventListener("click", viewEventRequests);
+
+//make sure the function is asycnc so the page doesn't get stuck
+async function viewEventRequests() {
+    //using try catch block to handle erroes
+    try{
+        const response = await fetch("/viewEventRequests")
+        //.ok is a property of response object that check to
+        //if the response status is in the range 200-299
+        if (!response.ok)
+        {
+            throw new Error("Failed to load event requests.");
+        }
+        //converts the response to array of event objects
+        const events = await response.json();
+
+        //get the table body element to populate with event requests
+        const tbody = document.getElementById("requestTableBody");
+        //clear existing data in the table body
+        tbody.innerHTML = "";
+
+        //iterate through each event and create table rows
+        for (const event of events){
+            const tr = document.createElement("tr");
+            //assigning id to each tr so it makes it easier later to remove them when approved or denied
+            tr.id = "event " + event.id;
+            //Adjust the innerhtml of each table row based on the response from backend
+            tr.innerHTML = 
+            `<td>${event.id}</td>
+            <td>${event.name}</td>
+            <td>${event.date}</td>
+            <td>${event.time}</td>
+            <td>
+                <button onclick="approveEvent(${event.id})">Approve</button>
+                <button onclick="denyEvent(${event.id})">Deny</button>
+            </td>`;
+            tbody.appendChild(tr);
+            //check to see if there are no event requests
+            if (events.length === 0){
+                const tr = document.createElement("tr");
+                //the purpose of colspan 5 is to make the message span across all 5 columns of the table
+                tr.innerHTML = `<td colspan="5">No pending event requests found.</td>`;
+                tbody.appendChild(tr);
+            }
+        }
+    }
+    catch (err)
+    {
+            alert("Error loading event requests. Please try again later.")
+    }
+}
