@@ -19,3 +19,35 @@
         </div>
     </header>
 
+    <main class="main-content">
+        <!-- Button to load all pending event requests-->
+         <section class = "admin-actions">
+            <button class="primary-btn" id="viewRequestsBtn">
+                Vew Event requests
+            </button>
+        </section>
+
+        <!--Table containing event requests-->
+        <section class="requests-section">
+            <h2>Pending Event Requests</h2>
+            <table id="requestsTable">
+                <thead>
+                    <tr>
+                        <th>Event ID</th>
+                        <th>Event Name</th>
+                        <th>Event Date</th>
+                        <th>Event Time</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="requestsTableBody">
+                    <!--Fileed by admin.js if there are any pendind requests-->
+                </tbody>
+            </table>
+        </section>
+
+    </main>>
+    <script src="./js/admin.js"></script>
+</body>
+</html>
+
