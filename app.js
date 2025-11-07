@@ -31,6 +31,8 @@ app.get('/events', (req, res) =>
     res.json(events);
 });
 
+app
+
 // Start Express
 app.listen(3000, () => console.log('Running on port 3000'));
 
