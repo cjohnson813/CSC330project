@@ -4,6 +4,7 @@ document.getElementById("viewRequestsBtn").addEventListener("click", viewEventRe
 async function viewEventRequests() {
     //using try catch block to handle erroes
     try{
+        //send a get request to the server to get the list of event requests
         const response = await fetch("/viewEventRequests")
         //.ok is a property of response object that check to
         //if the response status is in the range 200-299
@@ -18,7 +19,14 @@ async function viewEventRequests() {
         const tbody = document.getElementById("requestTableBody");
         //clear existing data in the table body
         tbody.innerHTML = "";
-
+        //check to see if there are no event requests, === checks type and value
+        if (events.length === 0){
+                const tr = document.createElement("tr");
+                //the purpose of colspan 5 is to make the message span across all 5 columns of the table
+                tr.innerHTML = `<td colspan="5">No pending event requests found.</td>`;
+                tbody.appendChild(tr);
+                return;
+        }
         //iterate through each event and create table rows
         for (const event of events){
             const tr = document.createElement("tr");
@@ -35,13 +43,6 @@ async function viewEventRequests() {
                 <button onclick="denyEvent(${event.id})">Deny</button>
             </td>`;
             tbody.appendChild(tr);
-            //check to see if there are no event requests
-            if (events.length === 0){
-                const tr = document.createElement("tr");
-                //the purpose of colspan 5 is to make the message span across all 5 columns of the table
-                tr.innerHTML = `<td colspan="5">No pending event requests found.</td>`;
-                tbody.appendChild(tr);
-            }
         }
     }
     catch (err)
