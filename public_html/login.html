@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head><meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>CS Marketplace - Login / Sign Up</title>
+        <link rel="stylesheet" href=".css/styles.css">
+    </head>
+    <body>
+        <header class="header">
+            <div class="header-content">
+                <h1 class="logo">CS Marketplace</h1>
+                <nav class="nav-buttons">
+                    <button class="nav-btn" id="homeBtn">Home</button>
+                    <button class="nav-btn" id="viewBtn">View Events</button>
+                    <button class="nav-btn" id="scheduleBtn">Schedule Events</button>                    
+                    <button class="nav-btn" id="contactBtn">Contact Us</button>
+                </nav>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <div class="login-container">
+                <h2>Login</h2>
+                <form id="loginForm" class="login-form">
+                    <input type="text" id="username" name="username" placeholder="Username" required>
+                    <input type="password" id="password" name="password" placeholder="Password" required>
+                    <button type="submit" class="primary-btn">Login</button>
+                </form>
+                <h3>Don't have an account?</h3>
+                <form id="signupForm" class="login-form">
+                    <input type="text" id="newUsername" name="newUsername" placeholder="Username" required>
+                    <input type="password" id="newPassword" name="newPassword" placeholder="Password" required>
+                    <button type="submit" class="primary-btn">Sign Up</button>
+                </form>
+                <p id="statusMsg"></p>
+            </div>
+        </main>
+        <script src="./js/login.js"></script>
+    </body>
+</html>

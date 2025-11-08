@@ -179,3 +179,13 @@ body {
     border: 2px solid mediumslateblue;
     background: lightskyblue;
 }
+
+.login-form {
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 20px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 10px 40px black;
+    text-align: center;
+}
