@@ -2,6 +2,9 @@ const express = require('express');
 const app = express();
 
 app.use(express.json());
+
+//default route is not needed as the express will look 
+// for index.html in public_html when a request is made to "/"
 app.use(express.static('public_html'));
 
 // Array for demonstration purposes. Replace with database later
@@ -68,6 +71,7 @@ app.post("/denyEvent", (req, res) =>
     eventRequests.splice(eventIndex, 1);
     res.send("Event denied.");
 })
+
 
 // Start Express
 app.listen(3000, () => console.log('Running on port 3000'));
