@@ -13,7 +13,7 @@ class Calendar {
         this.attachEventListeners();
     }
     // add event listeners to each landing page button (header and calendar)
-    attachEventListeners() {
+    async attachEventListeners() {
         // previous month button
         document.getElementById('previousMonth').addEventListener('click', () => {
             this.currentDate.setMonth(this.currentDate.getMonth() - 1); // go back 1 month
@@ -26,7 +26,9 @@ class Calendar {
         });
         // login button (to be completed)
         document.getElementById('loginBtn').addEventListener('click', () => {
-            alert('tbd');
+            //sends a get request to /login.html, no need for fetch API here
+            //and no need for code in the backend since express.static serves the file automatically
+            window.location.href = '/login.html';
         });
         // contact button (to be completed)
         document.getElementById('contactBtn').addEventListener('click', () => {
