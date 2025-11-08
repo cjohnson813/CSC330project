@@ -180,7 +180,7 @@ body {
     background: lightskyblue;
 }
 
-.login-form {
+.form-container {
     max-width: 400px;
     margin: 50px auto;
     padding: 20px;
@@ -188,4 +188,13 @@ body {
     border-radius: 8px;
     box-shadow: 0 10px 40px black;
     text-align: center;
+}
+
+.login-form input {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
 }
