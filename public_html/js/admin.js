@@ -1,4 +1,9 @@
-document.getElementById("viewRequestsBtn").addEventListener("click", viewEventRequests);
+const requestsBtn = document.getElementById("viewRequestsBtn").addEventListener("click", viewEventRequests);
+const tableBody = document.getElementById('requestsTableBody');
+document.addEventListener('DOMContentLoaded', () => {
+    loadEventRequests();
+    pollNotifications();
+})
 
 //make sure the function is asycnc so the page doesn't get stuck
 async function viewEventRequests() {
