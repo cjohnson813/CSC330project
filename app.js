@@ -40,11 +40,13 @@ app.get('/events', (req, res) =>
     res.json(events);
 });
 
+//Specifically for admin, set permission after database setup
 app.get("/viewEventRequests", (req, res) =>
 {
     res.json(eventRequests);
 })
 
+//Specific to admin, set permission after database setup
 app.post("/approveEvent", (req, res) =>
 {
     const eventID = req.body.eventID;
@@ -59,6 +61,7 @@ app.post("/approveEvent", (req, res) =>
     res.send("Event approved.");
 })
 
+//Specific to admin, set permission after database setup
 app.post("/denyEvent", (req, res) =>
 {
     const eventID = req.body.eventID;
