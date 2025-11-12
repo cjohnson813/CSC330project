@@ -16,9 +16,9 @@ document.addEventListener('DOMContentLoaded', async () =>
                 const item = document.createElement('div');
                 item.classList.add('event-item');
                 item.innerHTML =
-                    '<h3>' + event.name + '</h3>' +
-                    '<p>Date: ' + event.date + '</p>' +
-                    '<p>Location: ' + event.location + '</p>' +
+                    '<h3>' + event.event_name + '</h3>' +
+                    '<p>Date: ' + event.event_name + '</p>' +
+                    '<p>Location: ' + event.event_location + '</p>' +
                     '<hr>';
                 eventList.appendChild(item);
             });

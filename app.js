@@ -1,19 +1,29 @@
 const express = require('express');
+const mysql = require('mysql2');
 const app = express();
 
 app.use(express.json());
-
-//default route is not needed as the express will look 
+// default route is not needed as the express will look 
 // for index.html in public_html when a request is made to "/"
 app.use(express.static('public_html'));
 
-// Array for demonstration purposes. Replace with database later
-let events = 
-[
-    { id: 1, name: 'Event Alpha',   date: '11/10/2025', location: 'Library' },
-    { id: 2, name: 'Event Bravo',   date: '11/15/2025', location: 'School' },
-    { id: 3, name: 'Event Charlie', date: '11/20/2025', location: 'Park' }
-];
+// Connect to database. Only works on approved IPs by server admin
+const db = mysql.createConnection(
+{
+
+	host: '34.23.144.80',
+	user: 'jared',
+	password: '@Password1',
+	database: 'CSMarketplace'
+	 	
+});
+
+// Display message based on connection status
+db.connect(err =>
+{
+	if (err) console.error('MySQL connection error: ', err);
+	else console.log('MySQL connection successful');	
+});
 
 let eventRequests =
 [
@@ -29,15 +39,35 @@ app.post('/schedule-event', (req, res) =>
     {
         return res.status(400).send('Missing required fields.');
     }
-    const newEvent = { id: events.length + 1, name, date, location };
-    events.push(newEvent);
-    res.send('Event scheduled');
+
+    const sql = 'INSERT INTO Events (event_name, event_date, event_location) VALUES (?, ?, ?)';
+    db.query(sql, [name, date, location || null], (err) =>
+    {
+    	if (err)
+    	{
+    		console.error('Error inserting event: ', err);
+    		return res.status(500).send('Error with database');
+    	}
+    	res.send('Event scheduled successfully');
+    });
 });
 
 // Handle viewing events (viewEvents.html)
 app.get('/events', (req, res) => 
 {
-    res.json(events);
+	const sql =  'SELECT event_name, event_date, event_location ' +
+			     'FROM Events ' +
+			     'ORDER BY event_name ASC';
+
+	db.query(sql, (err, rows) => 
+	{
+		if (err)
+		{
+			console.error('Error fetching events from database: ', err);
+			return res.status(500).send('Error with database');
+		}
+		res.json(rows);	
+	});
 });
 
 //Specifically for admin, set permission after database setup
@@ -77,5 +107,5 @@ app.post("/denyEvent", (req, res) =>
 
 
 // Start Express
-app.listen(3000, () => console.log('Running on port 3000'));
+app.listen(80, () => console.log('Running on port 80'));
 
