@@ -7,13 +7,23 @@ app.use(express.json());
 // for index.html in public_html when a request is made to "/"
 app.use(express.static('public_html'));
 
-// Array for demonstration purposes. Replace with database later
-let events = 
-[
-    { id: 1, name: 'Event Alpha',   date: '11/10/2025', location: 'Library' },
-    { id: 2, name: 'Event Bravo',   date: '11/15/2025', location: 'School' },
-    { id: 3, name: 'Event Charlie', date: '11/20/2025', location: 'Park' }
-];
+// Connect to database. Only works on approved IPs by server admin
+const db = mysql.createConnection(
+{
+
+	host: '34.23.144.80',
+	user: 'jared',
+	password: '@Password1',
+	database: 'CSMarketplace'
+	 	
+});
+
+// Display message based on connection status
+db.connect(err =>
+{
+	if (err) console.error('MySQL connection error: ', err);
+	else console.log('MySQL connection successful');	
+});
 
 let eventRequests =
 [
@@ -75,6 +85,37 @@ app.post("/denyEvent", (req, res) =>
     res.send("Event denied.");
 })
 
+app.post("/login", (req, res) =>
+{
+    const {username, password} = req.body || {};
+    if (!username || !password)
+    {
+        return res.status(400).send("Missing username or password.");
+    }
+    //query database for user
+    const sql = "SELECT * FROM Users WHERE user_name = ?";
+    db.query(sql, [username], (err, results) =>
+    {
+        if (err)
+        {
+            console.error("Database error: ", err);
+            return res.status(500).send("Error with database.");
+        }
+        //check if user exists
+        if (results.length === 0)
+        {
+            return res.status(401).send("Invalid username or password.");
+        }
+        //assign current user
+        const user = results[0];
+        //check password
+        if (user.password !== password)
+        {
+            return res.status(401).send("Invalid password.");
+        }
+        res.send("Login successful.");     
+    });
+});
 
 // Start Express
 app.listen(3000, () => console.log('Running on port 3000'));
