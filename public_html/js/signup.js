@@ -4,7 +4,7 @@ document.getElementById("signup-form").addEventListener("submit", signupUser);
 
 async function signupUser(event)
 {
-    //stops page from refreshing on form submission
+    //stops page from refreshing on form submission as the button type is submit
     event.preventDefault();
     //Get values at the time of submission
     const userNameInput = document.getElementById("newUsername").value;
@@ -24,7 +24,8 @@ async function signupUser(event)
         body: JSON.stringify({ username: userNameInput, password: passwordInput, email: emailInput, github: githubInput})
         });
         if (!response.ok){
-        throw new Error("Signup failed.");          
+        const errorMsg = await response.text();
+        throw new Error(errorMsg);          
         }
         document.getElementById("statusMsg").innerText = await response.text(); 
         window.location.href = "index.html";
