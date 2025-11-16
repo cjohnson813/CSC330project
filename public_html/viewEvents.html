@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,14 +9,36 @@
 </head>
 
 <body>
-  <h1>View Events</h1>
 
-  <div id="eventList"></div>
+  <header class="header">
+    <div class="header-content">
+      <div class="logo">CSMarketplace</div>
+      <div class="nav-buttons">
+        <button class="nav-btn" onclick="window.location.href='index.html'">Home</button>
+        <button class="nav-btn" onclick="window.location.href='viewEvents.html'">View Events</button>
+        <button class="nav-btn" onclick="window.location.href='scheduleEvent.html'">Schedule Event</button>
+      </div>
+    </div>
+  </header>
 
-  <button id="homeBtn">Back to Home</button>
+  <div class="login-page">
+    <div class="login-container" style="width: 500px; text-align: left;">
+
+      <h1 style="text-align:center; margin-bottom: 20px;">View Events</h1>
+
+      <div id="eventList" style="margin-bottom: 20px;"></div>
+
+      <p id="statusMessage" class="status-message"></p>
+
+      <button class="nav-btn" style="width:100%;" onclick="window.location.href='index.html'">
+        Back to Home
+      </button>
+
+    </div>
+  </div>
 
   <script src="js/viewEvents.js"></script>
+
 </body>
-
-
 </html>
+
