@@ -11,9 +11,11 @@ document.addEventListener('DOMContentLoaded', () =>
         const name = document.getElementById('eventName').value;
         const date = document.getElementById('eventDate').value;
         const location = document.getElementById('eventLocation').value;
-
+		const time = document.getElementById('eventTime').value;
+		const capacity = document.getElementById('eventCapacity').value;
+		        
         // Sanity check for event information
-        if (!name || !date || !location)
+        if (!name || !date || !location || !time || !capacity)
         {
             alert('Please fill in all fields.');
             return;
@@ -26,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () =>
             {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name, date, location })
+                body: JSON.stringify({ name, date, location, time, capacity })
             });
 
             // Confirmation message, then reset form
