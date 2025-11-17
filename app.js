@@ -325,5 +325,5 @@ app.post("/signup", (req, res) => {
 });
 
 // Start Express
-app.listen(80, () => console.log('Running on port 80'));
+app.listen(3000, () => console.log('Running on port 3000'));
 
