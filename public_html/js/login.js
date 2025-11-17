@@ -1,5 +1,16 @@
 document.getElementById("login-form").addEventListener("submit", loginUser);
 
+// home button function
+document.getElementById("homeBtn").addEventListener('click', () =>
+{
+    window.location.href = 'index.html';
+});
+
+// view events button function
+document.getElementById("viewBtn").addEventListener('click', () =>
+{
+    window.location.href = 'viewEvents.html';
+});
 
 async function loginUser(event)
 {
