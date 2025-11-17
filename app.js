@@ -99,7 +99,7 @@ app.post("/approveEvent", (req, res) =>
                 return res.status(500).send("Error approving event.");
             }
             //Update the status of the request to Approved
-            const updateRequestSql = "UPDATE EventRequests SET status = 'Approved' WHERE request_id = ?";
+            const updateRequestSql = "UPDATE EventRequests SET status = 'approved' WHERE request_id = ?";
             db.query(updateRequestSql, [eventID], (err) =>
             {
                 if (err)
@@ -122,7 +122,7 @@ app.post("/denyEvent", (req, res) =>
         return res.status(400).send("Missing event ID.");
     }
     //Update the status of the request to Denied
-    const updateRequestSql = "UPDATE EventRequests SET status = 'Denied' WHERE request_id = ? AND status = 'Pending'";
+    const updateRequestSql = "UPDATE EventRequests SET status = 'denied' WHERE request_id = ? AND status = 'pending'";
     db.query(updateRequestSql, [eventID], (err, result) =>
     {
         if (err)
