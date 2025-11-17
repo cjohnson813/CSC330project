@@ -10,7 +10,6 @@ app.use(express.static('public_html'));
 const bcrypt = require('bcrypt');
 //encryption will be 2^number of rounds
 const SALT_ROUNDS = 10;
-const mysql =  require('mysql');
 
 // Connect to database. Only works on approved IPs by server admin
 const db = mysql.createConnection(
