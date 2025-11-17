@@ -1,4 +1,4 @@
-document.getElementById("login-form").addEventListener("submit", loginUser);
+document.getElementById("loginForm").addEventListener("submit", loginUser);
 
 
 async function loginUser(event)
@@ -15,11 +15,10 @@ async function loginUser(event)
         headers: { "Content-Type" : "application/json" },
         body: JSON.stringify({ username: usernameInput, password: passwordInput})
         });
-        if (!response.ok){
-        const errorMsg = await response.text();
-        throw new Error(errorMsg);          
-        }
         const message = await response.text();
+        if (!response.ok){
+        throw new Error(message);          
+        }
         document.getElementById("statusMsg").innerText = message; 
         //If login is successful, redirect to homepage
         window.location.href = "index.html";
