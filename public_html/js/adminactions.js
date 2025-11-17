@@ -7,7 +7,7 @@ async function approveEvent(eventId)
         //better to use separate header and body for POST requests rather than appending data to URL
         const response = await fetch("/approveEvent", {
             method: "POST",
-            headers: { "Content;Type" : "application/json" },
+            headers: { "Content-Type" : "application/json" },
             body: JSON.stringify({ eventID: eventId })
         });
         //check if response status is not between 200-299
@@ -41,7 +41,7 @@ async function denyEvent(eventId)
         if (!response.ok){
         throw new Error("Failed to approve event.");
         }
-        alert("Event approved successfully.");
+        alert("Event denied successfully.");
         //if event is approved, remove the event row from the table
         //this is only for the frontend, the backend also removes it from the database
         removeEventRow(eventId);

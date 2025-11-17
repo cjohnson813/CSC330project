@@ -1,4 +1,4 @@
-document.getElementById("signup-form").addEventListener("submit", signupUser);
+document.getElementById("signupForm").addEventListener("submit", signupUser);
 
 
 
@@ -10,6 +10,7 @@ async function signupUser(event)
     const userNameInput = document.getElementById("newUsername").value;
     const passwordInput = document.getElementById("newPassword").value;
     const confirmPasswordInput = document.getElementById("confirmPassword").value;
+    const phoneNumberInput = document.getElementById("phoneNumber").value;
     const emailInput = document.getElementById("email").value;
     const githubInput = document.getElementById("github").value;
     try
@@ -21,7 +22,11 @@ async function signupUser(event)
         const response = await fetch("/signup", {
         method: "POST",
         headers: { "Content-Type" : "application/json" },
-        body: JSON.stringify({ username: userNameInput, password: passwordInput, email: emailInput, github: githubInput})
+        body: JSON.stringify({ username: userNameInput, 
+            password: passwordInput, 
+            phoneNumber: phoneNumberInput, 
+            email: emailInput, 
+            github: githubInput})
         });
         if (!response.ok){
         const errorMsg = await response.text();

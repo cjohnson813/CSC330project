@@ -26,11 +26,13 @@
                     <button type="submit" class="primary-btn">Login</button>
                 </form>
                 <h3>Don't have an account?</h3>
-                <form id="signupForm" class="login-form">
+                <button id="showSignupBtn" class="secondary-btn">Sign Up</button>
+                <form id="signupForm" class="login-form" style="display: none;">
                     <input type="text" id="newUsername" placeholder="Username" required>
                     <input type ="email" id="email" placeholder="Email" required>
                     <input type="password" id="newPassword" placeholder="Password" required>
                     <input type ="password" id="confirmPassword" placeholder="Confirm Password" required>
+                    <input type="number" id="phoneNumber" placeholder ="Phone Number" required>
                     <label for="github">GitHub Profile (optional):</label>
                     <input type ="url" id="github" placeholder="https://github.com/username">
                     <button type="submit" class="primary-btn">Sign Up</button>
@@ -38,6 +40,7 @@
                 <p id="statusMsg"></p>
             </div>
         </main>
+        <script src="./js/signup.js"></script>
         <script src="./js/login.js"></script>
     </body>
 </html>

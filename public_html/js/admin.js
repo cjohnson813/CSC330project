@@ -16,7 +16,7 @@ async function viewEventRequests() {
         const events = await response.json();
 
         //get the table body element to populate with event requests
-        const tbody = document.getElementById("requestTableBody");
+        const tbody = document.getElementById("requestsTableBody");
         //clear existing data in the table body
         tbody.innerHTML = "";
         //check to see if there are no event requests, === checks type and value
