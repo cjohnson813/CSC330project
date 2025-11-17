@@ -43,3 +43,13 @@ async function signupUser(event)
 
     }
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+    const showSignupBtn = document.getElementById("showSignupBtn");
+    const signupFrom = document.getElementById("signupForm");
+
+    showSignupBtn.addEventListener("click", () => {
+        signupFrom.style.display = "block";
+        showSignupBtn.style.display = "none";
+    });
+});

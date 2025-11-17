@@ -1,9 +1,10 @@
 const express = require('express');
-const mysql = require('mysql2');
 const app = express();
+const mysql =  require('mysql');
 
 app.use(express.json());
-// default route is not needed as the express will look 
+
+//default route is not needed as the express will look 
 // for index.html in public_html when a request is made to "/"
 app.use(express.static('public_html'));
 //import encryption library
@@ -16,7 +17,7 @@ const db = mysql.createConnection(
 {
 
 	host: '34.23.144.80',
-	user: 'jared',
+	user: 'muhammad',
 	password: '@Password1',
 	database: 'CSMarketplace'
 	 	
@@ -32,128 +33,27 @@ db.connect(err =>
 // Handle scheduling events (scheduleEvent.html)
 app.post('/schedule-event', (req, res) => 
 {
-    const { name, date, location, time, capacity } = req.body || {};
-    if (!name || !date || !location || !time || !capacity) 
+    const { name, date, location } = req.body || {};
+    if (!name || !date || !location) 
     {
         return res.status(400).send('Missing required fields.');
     }
-
-    const sql = 'INSERT INTO Events (event_name, event_date, event_location, event_time, event_capacity)' + 
-    			'VALUES (?, ?, ?, ?, ?)';
-    			
-    db.query(sql, [name, date, location, time, capacity || null], (err) =>
-    {
-    	if (err)
-    	{
-    		console.error('Error inserting event: ', err);
-    		return res.status(500).send('Error with database');
-    	}
-    	res.send('Event scheduled successfully');
-    });
+    const newEvent = { id: events.length + 1, name, date, location };
+    events.push(newEvent);
+    res.send('Event scheduled');
 });
 
 // Handle viewing events (viewEvents.html)
 app.get('/events', (req, res) => 
 {
-	const sql =  'SELECT event_id, event_name, event_date, event_location, event_time, event_capacity ' +
-			     'FROM Events ' +
-			     'ORDER BY event_name ASC';
-
-	db.query(sql, (err, rows) => 
-	{
-		if (err)
-		{
-			console.error('Error fetching events from database: ', err);
-			return res.status(500).send('Error with database');
-		}
-		res.json(rows);	
-	});
-});
-
-// Get event ID (for editing events)
-app.get('/events/:id', (req, res) =>
-{
-	const eventID = req.params.id;
-	const sql = 'SELECT event_id, event_name, event_date, event_location, event_time, event_capacity ' +
-				'FROM Events WHERE event_id = ?';
-
-	db.query(sql, [eventID], (err, rows) =>
-	{
-		if (err)
-		{
-			console.error('Error fetching event ID: ', err);
-			return res.status(500).send('Error with database');
-		}
-
-		if (rows.length === 0)
-		{
-			return res.status(404).send('Event not found');
-		}
-
-		res.json(rows[0]);	
-	});
-});
-
-// Handle editing events (by event ID)
-app.put('/events/:id', (req, res) =>
-{
-	const eventID = req.params.id;
-	const { name, date, location, time, capacity } = req.body || {};
-
-	if (!name || !date || !location || !time || !capacity)
-	{
-		return res.status(400).send('Missing required fields.');
-	}
-
-	const sql = 'UPDATE Events ' +
-				'SET event_name = ?, event_date = ?, event_location = ?, event_time = ?, event_capacity = ? ' +
-				'WHERE event_id = ?';
-
-	db.query(sql, [name, date, location, time, capacity, eventID], (err, result) =>
-	{
-		if (err)
-		{
-			console.error('Error updating event: ', err);
-			return res.status(500).send('Error with database');
-		}
-
-		if (result.affectedRows === 0)
-		{
-			return res.status(404).send('Event not found');
-		}
-
-		res.send('Event updated successfully');	
-	});	
-});
-
-// Handle deleting events (by event ID)
-app.delete('/events/:id', (req, res) =>
-{
-	const eventID = req.params.id;
-	const sql = 'DELETE FROM Events WHERE event_id = ?';
-
-	db.query(sql, [eventID], (err, result) =>
-	{
-		if (err)
-		{
-			console.error('Error deleting event: ', err);
-			return res.status(500).send('Error with database');
-		}
-
-		if (result.affectedRows === 0)
-		{
-			return res.status(404).send('Event not found');
-		}
-
-		res.send('Event deleted successfully')
-	});	
+    res.json(events);
 });
 
 //Specifically for admin, set permission after database setup
 app.get("/viewEventRequests", (req, res) =>
 {
     //query database for pending event requests
-    const sql = "SELECT request_id AS id, event_name AS name, event_date AS date, event_time AS time FROM EventRequests WHERE status = 'Pending'";
+    const sql = "SELECT request_id AS id, event_name AS name, event_date AS date, event_time AS time FROM EventRequests WHERE status = 'pending'";
     db.query(sql, (err, results) =>
     {
         if (err)
@@ -284,7 +184,7 @@ app.post("/login", (req, res) =>
 app.post("/signup", (req, res) => {
     //use || {} to prevent errors if body is undefined
     const {fullName, username, password, phoneNumber, email, github} = req.body || {};
-    if (!fullName, !username || !password || !phoneNumber || !email) {
+    if (!fullName || !username || !password || !phoneNumber || !email) {
         return  res.status(400).send("Missing required fields.");
     }
     //check if username already exists
