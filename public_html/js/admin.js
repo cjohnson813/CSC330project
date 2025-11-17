@@ -39,8 +39,8 @@ async function viewEventRequests() {
             <td>${event.date}</td>
             <td>${event.time}</td>
             <td>
-                <button onclick="approveEvent(${event.id})">Approve</button>
-                <button onclick="denyEvent(${event.id})">Deny</button>
+                <button class="primary-btn" onclick="approveEvent(${event.id})">Approve</button>
+                <button class="primary-btn" onclick="denyEvent(${event.id})">Deny</button>
             </td>`;
             tbody.appendChild(tr);
         }
