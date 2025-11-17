@@ -7,6 +7,7 @@ async function signupUser(event)
     //stops page from refreshing on form submission as the button type is submit
     event.preventDefault();
     //Get values at the time of submission
+    const fullNameInput = document.getElementById("fullName").value;
     const userNameInput = document.getElementById("newUsername").value;
     const passwordInput = document.getElementById("newPassword").value;
     const confirmPasswordInput = document.getElementById("confirmPassword").value;
@@ -22,7 +23,8 @@ async function signupUser(event)
         const response = await fetch("/signup", {
         method: "POST",
         headers: { "Content-Type" : "application/json" },
-        body: JSON.stringify({ username: userNameInput, 
+        body: JSON.stringify({fullName: fullNameInput,
+            username: userNameInput, 
             password: passwordInput, 
             phoneNumber: phoneNumberInput, 
             email: emailInput, 

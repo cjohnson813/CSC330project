@@ -182,8 +182,8 @@ app.post("/login", (req, res) =>
 
 app.post("/signup", (req, res) => {
     //use || {} to prevent errors if body is undefined
-    const {username, password, phoneNumber, email, github} = req.body || {};
-    if (!username || !password || !phoneNumber || !email) {
+    const {fullName, username, password, phoneNumber, email, github} = req.body || {};
+    if (!fullName, !username || !password || !phoneNumber || !email) {
         return  res.status(400).send("Missing required fields.");
     }
     //check if username already exists
@@ -209,8 +209,8 @@ app.post("/signup", (req, res) => {
                 return res.status(500).send("Error processing password.");
             }
             //Insert new user into database
-            const insertUserSql = "INSERT INTO Users (user_name, password, phoneNumber, email) VALUES (?, ?, ?, ?)";
-            db.query(insertUserSql, [username, hashedPassword, phoneNumber, email], (err) =>
+            const insertUserSql = "INSERT INTO Users (name, user_name, password, phoneNumber, email) VALUES (?, ?, ?, ?, ?)";
+            db.query(insertUserSql, [fullName, username, hashedPassword, phoneNumber, email], (err) =>
             {
                 if (err)
                 {
