@@ -16,7 +16,7 @@ async function viewEventRequests() {
         const events = await response.json();
 
         //get the table body element to populate with event requests
-        const tbody = document.getElementById("requestTableBody");
+        const tbody = document.getElementById("requestsTableBody");
         //clear existing data in the table body
         tbody.innerHTML = "";
         //check to see if there are no event requests, === checks type and value
@@ -39,8 +39,8 @@ async function viewEventRequests() {
             <td>${event.date}</td>
             <td>${event.time}</td>
             <td>
-                <button onclick="approveEvent(${event.id})">Approve</button>
-                <button onclick="denyEvent(${event.id})">Deny</button>
+                <button class="primary-btn" onclick="approveEvent(${event.id})">Approve</button>
+                <button class="primary-btn" onclick="denyEvent(${event.id})">Deny</button>
             </td>`;
             tbody.appendChild(tr);
         }
