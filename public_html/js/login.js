@@ -3,7 +3,7 @@ document.getElementById("login-form").addEventListener("submit", loginUser);
 
 async function loginUser(event)
 {
-    //stops page from refreshing on form submission
+    //stops page from refreshing on form submission as the button type is submit
     event.preventDefault();
     //Get values at the time of submission
     const usernameInput = document.getElementById("username").value;
