@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+const mysql =  require('mysql');
 
 app.use(express.json());
 
@@ -52,7 +53,7 @@ app.get('/events', (req, res) =>
 app.get("/viewEventRequests", (req, res) =>
 {
     //query database for pending event requests
-    const sql = "SELECT request_id AS id, event_name AS name, event_date AS date, event_time AS time FROM EventRequests WHERE status = 'Pending'";
+    const sql = "SELECT request_id AS id, event_name AS name, event_date AS date, event_time AS time FROM EventRequests WHERE status = 'pending'";
     db.query(sql, (err, results) =>
     {
         if (err)
@@ -183,7 +184,7 @@ app.post("/login", (req, res) =>
 app.post("/signup", (req, res) => {
     //use || {} to prevent errors if body is undefined
     const {fullName, username, password, phoneNumber, email, github} = req.body || {};
-    if (!fullName, !username || !password || !phoneNumber || !email) {
+    if (!fullName || !username || !password || !phoneNumber || !email) {
         return  res.status(400).send("Missing required fields.");
     }
     //check if username already exists
@@ -224,5 +225,5 @@ app.post("/signup", (req, res) => {
 });
 
 // Start Express
-app.listen(3000, () => console.log('Running on port 3000'));
+app.listen(80, () => console.log('Running on port 80'));
 
