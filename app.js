@@ -224,7 +224,7 @@ app.post("/denyEvent", (req, res) =>
         return res.status(400).send("Missing event ID.");
     }
     //Update the status of the request to Denied
-    const updateRequestSql = "UPDATE EventRequests SET status = 'denied' WHERE request_id = ? AND status = 'pending'";
+    const updateRequestSql = "UPDATE EventRequests SET status = 'rejected' WHERE request_id = ? AND status = 'pending'";
     db.query(updateRequestSql, [eventID], (err, result) =>
     {
         if (err)
