@@ -15,12 +15,17 @@ async function loginUser(event)
         headers: { "Content-Type" : "application/json" },
         body: JSON.stringify({ username: usernameInput, password: passwordInput})
         });
-        const message = await response.text();
+        const data = await response.json();
         if (!response.ok){
-        throw new Error(message);          
+        document.getElementById("statusMsg").innerText = data.message;
+        return;         
         }
-        document.getElementById("statusMsg").innerText = message; 
+        document.getElementById("statusMsg").innerText = data.message; 
         //If login is successful, redirect to homepage
+        if (data.isAdmin){
+            window.location.href = "admin.html";
+        }
+        else
         window.location.href = "index.html";
     }
     catch (err)

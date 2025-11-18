@@ -263,6 +263,21 @@ app.post("/login", (req, res) =>
             return res.status(401).send("Invalid username or password.");
         }
         //assign current user
+        isAdmin = false;
+        user_id = results[0].user_id;
+        const checkAdmin = "SELECT * FROM Admins WHERE user_id = ?";
+        db.query(checkAdmin, [user_id], (err, adminResults) =>
+        {
+            if (err)
+            {
+                console.error("Database error: ", err);
+                return res.status(500).send("Error with database.");
+            }
+            if (adminResults.length > 0)
+            {
+                isAdmin = true;
+            }
+        });
         const user = results[0];
         //check encrypted password
         bcrypt.compare(password, user.password, (err, isMatch) =>
@@ -276,7 +291,10 @@ app.post("/login", (req, res) =>
             {
                 return res.status(401).send("Invalid username or password.");
             }
-            res.send("Login successful.");
+            return res.json({
+                message: "Login successful.",
+                isAdmin: isAdmin
+            });
         });    
     });
 });
