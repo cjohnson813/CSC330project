@@ -1,4 +1,9 @@
-document.getElementById("viewRequestsBtn").addEventListener("click", viewEventRequests);
+document.getElementById("viewRequestsBtn").addEventListener("click", () => {
+    //show the hidden requests section when button is clicked
+    document.getElementById("requestsSection").style.display = "block";
+    //then call the function to view event requests
+    viewEventRequests();
+});
 
 
     // Add hover animation to primary button
@@ -29,6 +34,7 @@ async function viewEventRequests() {
     //using try catch block to handle erroes
     try{
         //send a get request to the server to get the list of event requests
+
         const response = await fetch("/viewEventRequests")
         //.ok is a property of response object that check to
         //if the response status is in the range 200-299
@@ -40,7 +46,7 @@ async function viewEventRequests() {
         const events = await response.json();
 
         //get the table body element to populate with event requests
-        const tbody = document.getElementById("requestTableBody");
+        const tbody = document.getElementById("requestsTableBody");
         //clear existing data in the table body
         tbody.innerHTML = "";
         //check to see if there are no event requests, === checks type and value
@@ -64,8 +70,8 @@ async function viewEventRequests() {
             <td>${event.date}</td>
             <td>${event.time}</td>
             <td>
-                <button onclick="approveEvent(${event.id})">Approve</button>
-                <button onclick="denyEvent(${event.id})">Deny</button>
+                <button class="primary-btn" onclick="approveEvent(${event.id})">Approve</button>
+                <button class="primary-btn" onclick="denyEvent(${event.id})">Deny</button>
             </td>`;
             tbody.appendChild(tr);
         }

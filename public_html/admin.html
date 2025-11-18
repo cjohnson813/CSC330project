@@ -2,10 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=devicewidth, initial-scale=1.0">
     <title>CS Marketplace - Admin</title>
-    <link rel="stylesheet" href="styles.css">
-    <!--src to anime.js library for admin.js animations-->
+    <link rel="stylesheet" href="./css/styles.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
 </head>
 
@@ -15,7 +14,7 @@
             <h1 class="logo">CS Marketplace</h1>
             <nav class="nav-buttons">
                 <button class="nav-btn" id="viewProfileBtn">View Profile</button>
-                <button class="nav-btn" id="contactBtn"></button>
+                <button class="nav-btn" id="contactBtn">Contact</button>
                 <button class="nav-btn" id="joinBtn">Join Group</button>
             </nav>
         </div>
@@ -30,25 +29,26 @@
         </section>
 
         <!--Table containing event requests-->
-        <section class="requests-section">
+        <section class="requests-section" id="requestsSection" style="display:none;">
             <h2>Pending Event Requests</h2>
-            <table id="requestsTable">
+            <table id="requestsTable" class ="requests-table">
                 <thead>
                     <tr>
-                        <th>Event ID</th>
-                        <th>Event Name</th>
-                        <th>Event Date</th>
-                        <th>Event Time</th>
+                        <th>Event ID </th>
+                        <th>Event Name </th>
+                        <th>Event Date </th>
+                        <th>Event Time </th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody id="requestsTableBody">
-                    <!--Fileed by admin.js if there are any pendind requests-->
+                    <!--Filled by admin.js if there are any pendind requests-->
                 </tbody>
             </table>
         </section>
 
     </main>
+    <script src="./js/adminactions.js"></script>
     <script src="./js/admin.js"></script>
 </body>
 </html>

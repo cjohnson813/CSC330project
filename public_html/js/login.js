@@ -1,4 +1,4 @@
-document.getElementById("login-form").addEventListener("submit", loginUser);
+document.getElementById("loginForm").addEventListener("submit", loginUser);
 
 // home button function
 document.getElementById("homeBtn").addEventListener('click', () =>
@@ -14,7 +14,7 @@ document.getElementById("viewBtn").addEventListener('click', () =>
 
 async function loginUser(event)
 {
-    //stops page from refreshing on form submission
+    //stops page from refreshing on form submission as the button type is submit
     event.preventDefault();
     //Get values at the time of submission
     const usernameInput = document.getElementById("username").value;
@@ -26,13 +26,17 @@ async function loginUser(event)
         headers: { "Content-Type" : "application/json" },
         body: JSON.stringify({ username: usernameInput, password: passwordInput})
         });
+        const data = await response.json();
         if (!response.ok){
-        const errorMsg = await response.text();
-        throw new Error(errorMsg);          
+        document.getElementById("statusMsg").innerText = data.message;
+        return;         
         }
-        const message = await response.text();
-        document.getElementById("statusMsg").innerText = message; 
+        document.getElementById("statusMsg").innerText = data.message; 
         //If login is successful, redirect to homepage
+        if (data.isAdmin){
+            window.location.href = "admin.html";
+        }
+        else
         window.location.href = "index.html";
     }
     catch (err)

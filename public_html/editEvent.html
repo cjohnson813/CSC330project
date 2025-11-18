@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Schedule Event</title>
+  <title>Edit Event</title>
   <link rel="stylesheet" href="css/styles.css">
 </head>
 
@@ -23,9 +23,9 @@
 
   <div class="login-page">
     <div class="login-container">
-      <h1>Schedule an Event</h1>
+      <h1>Edit Event</h1>
 
-      <form id="eventForm" class="login-form">
+      <form id="editEventForm" class="login-form">
         <label for="eventName">Event Name</label>
         <input type="text" id="eventName" placeholder="Event Name" required>
 
@@ -40,23 +40,26 @@
 
         <label for="eventCapacity">Event Capacity</label>
         <input type="number" id="eventCapacity" placeholder="Event Capacity" required>
-       
+
+        <!-- Status message for errors/success -->
+        <p id="statusMessage" style="margin-top: 10px;"></p>
 
         <button type="submit" class="nav-btn" style="width: 100%; margin-top: 10px;">
-          Submit
+          Save Changes
+        </button>
+
+        <button type="button" id="cancelBtn" class="nav-btn" style="width: 100%; margin-top: 10px;">
+          Cancel
         </button>
       </form>
 
       <p style="margin-top: 10px;">
-        <a href="index.html">← Back to Home</a>
+        <a href="viewEvents.html">← Back to Events</a>
       </p>
     </div>
   </div>
 
-  <script src="js/scheduleEvent.js"></script>
+  <script src="js/editEvent.js"></script>
 </body>
 
 </html>
-
-
-
