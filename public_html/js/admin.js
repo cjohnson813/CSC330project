@@ -69,6 +69,8 @@ async function viewEventRequests() {
             <td>${event.name}</td>
             <td>${event.date}</td>
             <td>${event.time}</td>
+            <td>${event.location}</td>
+            <td>${event.capacity}</td>
             <td>
                 <button class="primary-btn" onclick="approveEvent(${event.id})">Approve</button>
                 <button class="primary-btn" onclick="denyEvent(${event.id})">Deny</button>

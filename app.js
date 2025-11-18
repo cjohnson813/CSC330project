@@ -39,7 +39,7 @@ app.post('/schedule-event', (req, res) =>
         return res.status(400).send('Missing required fields.');
     }
 
-    const sql = 'INSERT INTO Events (event_name, event_date, event_location, event_time, event_capacity)' + 
+    const sql = 'INSERT INTO EventRequests (event_name, event_date, event_location, event_time, event_capacity)' + 
     			'VALUES (?, ?, ?, ?, ?)';
     			
     db.query(sql, [name, date, location, time, capacity || null], (err) =>
@@ -49,7 +49,7 @@ app.post('/schedule-event', (req, res) =>
     		console.error('Error inserting event: ', err);
     		return res.status(500).send('Error with database');
     	}
-    	res.send('Event scheduled successfully');
+    	res.send('Event request sent successfully');
     });
 });
 
@@ -149,6 +149,7 @@ app.delete('/events/:id', (req, res) =>
 		res.send('Event deleted successfully')
 	});	
 });
+
 //Specifically for admin, set permission after database setup
 app.get("/viewEventRequests", (req, res) =>
 {
@@ -191,8 +192,8 @@ app.post("/approveEvent", (req, res) =>
         //Extract event details
         const eventRequest = results[0];
         //Insert the approved event into Events table
-        const insertEventSql = "INSERT INTO Events (event_name, event_date, event_time) VALUES (?, ?, ?)";
-        db.query(insertEventSql, [eventRequest.event_name, eventRequest.event_date, eventRequest.event_time], (err) =>
+        const insertEventSql = "INSERT INTO Events (event_name, event_date, event_time, event_capacity, event_location) VALUES (?, ?, ?, ?, ?)";
+        db.query(insertEventSql, [eventRequest.event_name, eventRequest.event_date, eventRequest.event_time, eventRequest.event_capacity, eventRequest.event_location], (err) =>
         {
             if (err)
             {
