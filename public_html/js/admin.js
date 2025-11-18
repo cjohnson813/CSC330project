@@ -1,10 +1,16 @@
-document.getElementById("viewRequestsBtn").addEventListener("click", viewEventRequests);
+document.getElementById("viewRequestsBtn").addEventListener("click", () => {
+    //show the hidden requests section when button is clicked
+    document.getElementById("requestsSection").style.display = "block";
+    //then call the function to view event requests
+    viewEventRequests();
+});
 
 //make sure the function is asycnc so the page doesn't get stuck
 async function viewEventRequests() {
     //using try catch block to handle erroes
     try{
         //send a get request to the server to get the list of event requests
+
         const response = await fetch("/viewEventRequests")
         //.ok is a property of response object that check to
         //if the response status is in the range 200-299
