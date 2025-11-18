@@ -255,12 +255,12 @@ app.post("/login", (req, res) =>
         if (err)
         {
             console.error("Database error: ", err);
-            return res.status(500).send("Error with database.");
+            return res.status(500).json({message: "Error with database."});
         }
         //check if user exists
         if (results.length === 0)
         {
-            return res.status(401).send("Invalid username or password.");
+            return res.status(401).json({message: "Invalid username or password."});
         }
         //assign current user
         isAdmin = false;
@@ -271,7 +271,7 @@ app.post("/login", (req, res) =>
             if (err)
             {
                 console.error("Database error: ", err);
-                return res.status(500).send("Error with database.");
+                return res.status(500).json({message: "Error with database."});
             }
             if (adminResults.length > 0)
             {
@@ -285,11 +285,11 @@ app.post("/login", (req, res) =>
             if (err)
             {
                 console.error("Comparison error: ", err);
-                return res.status(500).send("Error processing password.");
+                return res.status(500).json({message: "Error processing password."});
             }
             if (!isMatch)
             {
-                return res.status(401).send("Invalid username or password.");
+                return res.status(401).json({message: "Invalid username or password."});
             }
             return res.json({
                 message: "Login successful.",
