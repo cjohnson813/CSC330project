@@ -1,5 +1,29 @@
 document.getElementById("viewRequestsBtn").addEventListener("click", viewEventRequests);
 
+
+    // Add hover animation to primary button
+const viewRequestsBtn = document.getElementById("viewRequestsBtn");
+if (viewRequestsBtn && typeof anime !== 'undefined') {
+    viewRequestsBtn.addEventListener('mouseenter', () => {
+        anime({
+            targets: viewRequestsBtn,
+            scale: [1, 1.05],
+            duration: 300,
+            easing: 'easeOutQuad'
+        });
+    });
+
+    viewRequestsBtn.addEventListener('mouseleave', () => {
+        anime({
+            targets: viewRequestsBtn,
+            scale: [1.05, 1],
+            duration: 300,
+            easing: 'easeOutQuad'
+        });
+    });
+}
+
+
 //make sure the function is asycnc so the page doesn't get stuck
 async function viewEventRequests() {
     //using try catch block to handle erroes
@@ -28,7 +52,8 @@ async function viewEventRequests() {
                 return;
         }
         //iterate through each event and create table rows
-        for (const event of events){
+        for (let i = 0; i < events.length; i++){
+            const event = events[i];
             const tr = document.createElement("tr");
             //assigning id to each tr so it makes it easier later to remove them when approved or denied
             tr.id = "event " + event.id;
@@ -44,7 +69,19 @@ async function viewEventRequests() {
             </td>`;
             tbody.appendChild(tr);
         }
+
+        // Animate event table appearance
+        if (typeof anime !== 'undefined' && events.length > 0) {
+            anime({
+                targets: '#requestsTable',
+                scale: [0.95, 1],
+                opacity: [0.8, 1],
+                duration: 600,
+                easing: 'easeOutQuad'
+            });           
+        }
     }
+
     catch (err)
     {
             alert("Error loading event requests. Please try again later.")
