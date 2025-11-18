@@ -12,7 +12,7 @@ async function approveEvent(eventId)
         });
         //check if response status is not between 200-299
         if (!response.ok){
-        throw new Error("Failed to approve event.");
+        throw new Error(response.text);
         }
         alert("Event approved successfully.");
         //if event is approved, remove the event row from the table
@@ -34,12 +34,12 @@ async function denyEvent(eventId)
         //better to use separate header and body for POST requests rather than appending data to URL
         const response = await fetch("/denyEvent", {
             method: "POST",
-            headers: { "Content;Type" : "application/json" },
+            headers: { "Content-Type" : "application/json" },
             body: JSON.stringify({ eventID: eventId })
         });
         //check if response status is not between 200-299
         if (!response.ok){
-        throw new Error("Failed to approve event.");
+        throw new Error(response.text);
         }
         alert("Event denied successfully.");
         //if event is approved, remove the event row from the table
