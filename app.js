@@ -154,7 +154,7 @@ app.delete('/events/:id', (req, res) =>
 app.get("/viewEventRequests", (req, res) =>
 {
     //query database for pending event requests
-    const sql = "SELECT request_id AS id, event_name AS name, event_date AS date, event_time AS time FROM EventRequests WHERE status = 'pending'";
+    const sql = "SELECT request_id AS id, event_name AS name, event_date AS date, event_time AS time, event_location as location, event_capacity as capacity FROM EventRequests WHERE status = 'pending'";
     db.query(sql, (err, results) =>
     {
         if (err)
