@@ -1,0 +1,42 @@
+updated code for SQL database 
+---------------------------------------------------
+* by chronological order of execution * 
+
+
+CREATE TABLE IF NOT EXISTS Roles (   role_id INT AUTO_INCREMENT PRIMARY KEY,   role_name VARCHAR(50) NOT NULL UNIQUE ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+
+
+ CREATE TABLE IF NOT EXISTS Events (   event_id INT AUTO_INCREMENT PRIMARY KEY,   event_date DATE NOT NULL,   event_name VARCHAR(255) NOT NULL,   start_time TIME NULL,   end_time TIME NULL,   status ENUM('pending','approved','rejected','cancelled') NOT NULL DEFAULT 'pending',   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,   updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+ 
+
+ CREATE TABLE IF NOT EXISTS EventRequests (   request_id INT AUTO_INCREMENT PRIMARY KEY,   event_date DATE NOT NULL,   start_time TIME NULL,   end_time TIME NULL,   event_name VARCHAR(255) NOT NULL,   requested_by INT NULL,                     -- FK to Users.user_id (who made the request)   status ENUM('pending','approved','rejected','cancelled') NOT NULL DEFAULT 'pending',   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,   updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,   CONSTRAINT fk_eventrequests_requested_by_user     FOREIGN KEY (requested_by) REFERENCES Users(user_id)       ON DELETE SET NULL ON UPDATE CASCADE ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+ CREATE TABLE IF NOT EXISTS RSVPs (   event_id INT NOT NULL,   user_id INT NOT NULL,   rsvp_status ENUM('attending','maybe','declined') NOT NULL DEFAULT 'attending',   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,   PRIMARY KEY (event_id, user_id),   INDEX idx_rsvp_event (event_id),   INDEX idx_rsvp_user (user_id),   CONSTRAINT fk_rsvps_event     FOREIGN KEY (event_id) REFERENCES Events(event_id)       ON DELETE CASCADE ON UPDATE CASCADE,   CONSTRAINT fk_rsvps_user     FOREIGN KEY (user_id) REFERENCES Users(user_id)       ON DELETE CASCADE ON UPDATE CASCADE ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+
+CREATE TABLE IF NOT EXISTS UserRoles (   user_id INT NOT NULL,   role_id INT NOT NULL,   assigned_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+PRIMARY KEY (user_id, role_id),   INDEX idx_userroles_role (role_id),   CONSTRAINT fk_userroles_user     FOREIGN KEY (user_id) REFERENCES Users(user_id)
+   ON DELETE CASCADE ON UPDATE CASCADE,   CONSTRAINT fk_userroles_role     FOREIGN KEY (role_id) REFERENCES Roles(role_id)       ON DELETE CASCADE ON UPDATE CASCADE ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+
+
+ CREATE TRIGGER limit_event_count BEFORE INSERT ON Events FOR EACH ROW BEGIN     DECLARE event_count INT;      -- Count how many events currently exist     SELECT COUNT(*) INTO event_count FROM Events;      -- Block insertion if limit reached     IF event_count >= 100 THEN         SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Event limit reached (maximum of 100 events allowed)';     END IF; END$$
+
+
+
+
+
+ALTER TABLE EventRequests;
+ADD COLUMN event_location
+ADD COLUMN event_capacity
+
+ALTER TABLE EventRequests ADD COLUMN event_location varchar(255);
+ALTER TABLE EventRequests ADD COLUMN event_capacity int;
