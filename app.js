@@ -17,7 +17,7 @@ const db = mysql.createConnection(
 {
 
 	host: '34.23.144.80',
-	user: 'muhammad',
+	user: 'jared',
 	password: '@Password1',
 	database: 'CSMarketplace'
 	 	
@@ -33,15 +33,19 @@ db.connect(err =>
 // Handle scheduling events (scheduleEvent.html)
 app.post('/schedule-event', (req, res) => 
 {
+	// Extracts information from req.body, assign them to seperate variables
     const { name, date, location, time, capacity } = req.body || {};
+    // Sanity check for missing information
     if (!name || !date || !location || !time || !capacity) 
     {
         return res.status(400).send('Missing required fields.');
     }
 
+	// Assign fields to be inserted into table
     const sql = 'INSERT INTO EventRequests (event_name, event_date, event_location, event_time, event_capacity)' + 
     			'VALUES (?, ?, ?, ?, ?)';
-    			
+
+    // Insert values into table, error if unsuccessful		
     db.query(sql, [name, date, location, time, capacity || null], (err) =>
     {
     	if (err)
@@ -56,10 +60,12 @@ app.post('/schedule-event', (req, res) =>
 // Handle viewing events (viewEvents.html)
 app.get('/events', (req, res) => 
 {
+	// Assign information to be viewed
 	const sql =  'SELECT event_id, event_name, event_date, event_location, event_time, event_capacity ' +
 			     'FROM Events ' +
 			     'ORDER BY event_name ASC';
 
+	// Fetch events from database, error if unsuccessful
 	db.query(sql, (err, rows) => 
 	{
 		if (err)
@@ -67,6 +73,7 @@ app.get('/events', (req, res) =>
 			console.error('Error fetching events from database: ', err);
 			return res.status(500).send('Error with database');
 		}
+		// Package data into JSON for use by frontend
 		res.json(rows);	
 	});
 });
@@ -74,10 +81,13 @@ app.get('/events', (req, res) =>
 // Get event ID (for editing events)
 app.get('/events/:id', (req, res) =>
 {
+	// Sent from frontend; extract event ID from URL
 	const eventID = req.params.id;
+	// Find event based on event's ID
 	const sql = 'SELECT event_id, event_name, event_date, event_location, event_time, event_capacity ' +
 				'FROM Events WHERE event_id = ?';
 
+	// Fetch event ID
 	db.query(sql, [eventID], (err, rows) =>
 	{
 		if (err)
@@ -90,7 +100,8 @@ app.get('/events/:id', (req, res) =>
 		{
 			return res.status(404).send('Event not found');
 		}
-
+		
+		// First row of result from MySQL query is always event_id
 		res.json(rows[0]);	
 	});
 });
@@ -98,18 +109,23 @@ app.get('/events/:id', (req, res) =>
 // Handle editing events (by event ID)
 app.put('/events/:id', (req, res) =>
 {
+	// Sent from front end
 	const eventID = req.params.id;
+	// Assign values to seperate variables
 	const { name, date, location, time, capacity } = req.body || {};
 
+	// Sanity check
 	if (!name || !date || !location || !time || !capacity)
 	{
 		return res.status(400).send('Missing required fields.');
 	}
 
+	// Edit event based on event's ID
 	const sql = 'UPDATE Events ' +
 				'SET event_name = ?, event_date = ?, event_location = ?, event_time = ?, event_capacity = ? ' +
 				'WHERE event_id = ?';
 
+	// Update event in database
 	db.query(sql, [name, date, location, time, capacity, eventID], (err, result) =>
 	{
 		if (err)
@@ -130,9 +146,12 @@ app.put('/events/:id', (req, res) =>
 // Handle deleting events (by event ID)
 app.delete('/events/:id', (req, res) =>
 {
+	// Event ID from frontend
 	const eventID = req.params.id;
+	// Delete event by event_id
 	const sql = 'DELETE FROM Events WHERE event_id = ?';
 
+	// Delete event from frontend
 	db.query(sql, [eventID], (err, result) =>
 	{
 		if (err)

@@ -96,12 +96,12 @@ document.addEventListener('DOMContentLoaded', async () =>
         });
     }
 
-    // Cancel button brings user back to Events list
+    // Cancel button brings admin back to admin page
     if (cancelBtn)
     {
         cancelBtn.addEventListener('click', function ()
         {
-            window.location.href = 'viewEvents.html';
+            window.location.href = 'admin.html';
         });
     }
 });

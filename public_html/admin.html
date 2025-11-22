@@ -23,9 +23,8 @@
     <main class="main-content">
         <!-- Button to load all pending event requests-->
          <section class = "admin-actions">
-            <button class="primary-btn" id="viewRequestsBtn">
-                View Event requests
-            </button>
+            <button class="primary-btn" id="viewRequestsBtn">View Event requests</button>
+            <button class="primary-btn" id="viewEventsBtn">View Events</button>
         </section>
 
         <!--Table containing event requests-->
@@ -48,6 +47,12 @@
                 </tbody>
             </table>
         </section>
+
+		<!-- Displays events with option to edit and delete -->
+		<section class="events-section" id="eventsSection" style="display:none;">
+			<h2>Events</h2>
+			<div id="events"></div>
+		</section>
 
     </main>
     <script src="./js/adminactions.js"></script>
