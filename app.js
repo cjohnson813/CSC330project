@@ -17,7 +17,7 @@ const db = mysql.createConnection(
 {
 
 	host: '34.23.144.80',
-	user: 'jared',
+	user: 'cameron',
 	password: '@Password1',
 	database: 'CSMarketplace'
 	 	
