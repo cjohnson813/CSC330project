@@ -49,9 +49,189 @@
             </table>
         </section>
 
-    </main>
+<!-- Floating Chat Widget -->
+<div id="chat-widget">
+    <div id="chat-body">
+        <div id="messages"></div>
+        <div id="chat-input-container">
+            <input type="text" id="messageInput" placeholder="Type your message...">
+            <button id="sendButton">Send</button>
+        </div>
+    </div>
+</div>
+
+<!-- Firebase Scripts (MUST BE LOADED FIRST) -->
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
+<script>
+    // Your Firebase configuration
+    const firebaseConfig = {
+        apiKey: "AIzaSyCTW4X-as9kz7Lgn4F_DdPX4rJFMsr396k",
+        authDomain: "csc330-csmarketplace.firebaseapp.com",
+        projectId: "csc330-csmarketplace",
+        storageBucket: "csc330-csmarketplace.firebasestorage.app",
+        messagingSenderId: "508892749106",
+        appId: "1:508892749106:web:bb7b4ea8328628e0af0b2b"
+    };
+
+    // Initialize Firebase
+    const app = firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    // Wait for DOM to load
+    document.addEventListener('DOMContentLoaded', function() {
+        const messageInput = document.getElementById('messageInput');
+        const sendButton = document.getElementById('sendButton');
+        const messagesContainer = document.getElementById('messages');
+
+        // Send message function
+        function sendMessage() {
+            const message = messageInput.value.trim();
+            
+            if (!message) return;
+
+            console.log('Sending message:', message);
+
+            db.collection("messages").add({
+                text: message,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                user: 'Admin'
+            }).then(() => {
+                console.log('Message sent successfully');
+                messageInput.value = '';
+                messageInput.focus();
+            }).catch((error) => {
+                console.error('Error sending message:', error);
+            });
+        }
+
+        // Event listeners
+        sendButton.addEventListener('click', sendMessage);
+        
+        messageInput.addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        // Listen for messages
+        db.collection("messages")
+            .orderBy('timestamp', 'asc')
+            .onSnapshot((snapshot) => {
+                console.log('New snapshot received:', snapshot.size, 'messages');
+                messagesContainer.innerHTML = "";
+                
+                snapshot.forEach((doc) => {
+                    const message = doc.data();
+                    console.log('Displaying message:', message);
+                    
+                    const messageElement = document.createElement('div');
+                    
+                    // Your messages on right, others on left
+                    if (message.user === 'Admin') {
+                        messageElement.className = 'message-bubble own';
+                        messageElement.textContent = message.text;
+                    } else {
+                        messageElement.className = 'message-bubble other';
+                        messageElement.textContent = `${message.user}: ${message.text}`;
+                    }
+                    
+                    messagesContainer.appendChild(messageElement);
+                });
+                
+                // Scroll to bottom
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            }, (error) => {
+                console.error('Error in message listener:', error);
+            });
+    });
+</script>
+
+<style>
+    #chat-widget {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 300px;
+        background: white;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        z-index: 1000;
+        font-family: Arial, sans-serif;
+    }
+
+    #messages {
+        height: 200px;
+        padding: 10px;
+        overflow-y: auto;
+        border-bottom: 1px solid #eee;
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .message-bubble {
+        max-width: 80%;
+        padding: 8px 12px;
+        border-radius: 18px;
+        word-wrap: break-word;
+        font-size: 14px;
+    }
+
+    .message-bubble.own {
+        background: #007bff;
+        color: white;
+        align-self: flex-end;
+        border-bottom-right-radius: 5px;
+    }
+
+    .message-bubble.other {
+        background: #e5e5ea;
+        color: black;
+        align-self: flex-start;
+        border-bottom-left-radius: 5px;
+    }
+
+    #chat-input-container {
+        display: flex;
+        padding: 10px;
+        gap: 8px;
+    }
+
+    #messageInput {
+        flex: 1;
+        padding: 8px 12px;
+        border: 1px solid #ddd;
+        border-radius: 20px;
+        outline: none;
+        font-size: 14px;
+    }
+
+    #messageInput:focus {
+        border-color: #007bff;
+    }
+
+    #sendButton {
+        background: #007bff;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 20px;
+        cursor: pointer;
+        font-size: 14px;
+    }
+
+    #sendButton:hover {
+        background: #0056b3;
+    }
+</style>
+                          
+
     <script src="./js/adminactions.js"></script>
     <script src="./js/admin.js"></script>
+    
 </body>
 </html>
 
