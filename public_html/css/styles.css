@@ -73,7 +73,7 @@ body {
     background: white;
     margin: 130px;
     border-radius: 20px;
-    padding: 6rem;
+    padding: clamp(2rem, 5vw, 6rem);
     box-shadow: 0 10px 40px black;
 }
 
@@ -119,26 +119,33 @@ body {
     display: flex;
     flex-direction: column;
     gap: 0.2rem;
+    width: 100%;
+    min-width: 0;
 }
 
 .calendar-weekdays {
     display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 0.2rem;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 0.5rem;
     margin-bottom: 0.5rem;
+    width: 100%;
 }
 
 .weekday {
     text-align: center;
     font-weight: 500;
     color: #1d0586;
-    padding: 1rem;
-    font-size: 1.1rem;
+    padding: clamp(0.5rem, 2vw, 1rem);
+    font-size: clamp(0.7rem, 1.5vw, 1.1rem);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-width: 0;
 }
 
 .calendar-days {
     display: grid;
-    grid-template-columns: repeat(7, 1fr);
+    grid-template-columns: repeat(7, minmax(0, 1fr));
     gap: 0.5rem;
 }
 
@@ -149,22 +156,24 @@ body {
     justify-content: flex-start;
     flex-direction: column;
     border-radius: 12px;
-    font-size: 1.1rem;
+    font-size: clamp(0.7rem, 1.5vw, 1.1rem);
     font-weight: 500;
     cursor: pointer;
     color: midnightblue;
     background: rgb(153, 203, 230);
     border: 1px solid black;
     transition: all 0.3s ease;
-    padding: 0.5rem;
+    padding: clamp(0.25rem, 1vw, 0.5rem);
     overflow-y: auto;
     position: relative;
-    min-height: 100px;
+    min-width: 0;
+    width: 100%;
 }
 
 .calendar-day:hover {
     background: rgb(95, 176, 219);
-    transform: scale(1.10);
+    transform: scale(1.05);
+    z-index: 10;
 }
 
 .calendar-day.other-month {
@@ -177,12 +186,12 @@ body {
     border: 2px lightblue solid;
     color: white;
     font-weight: 500px;
-    box-shadow: 0 4px 15px midnightblue;
+    box-shadow: 0 4px 15px mediumslateblue;
 }
 
 .calendar-day.selected {
-    border: 2px solid mediumslateblue;
-    background: lightskyblue;
+    border: 2px solid lightskyblue;
+    background: midnightblue;
 }
 
 .login-page{
