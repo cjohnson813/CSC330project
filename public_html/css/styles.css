@@ -162,7 +162,7 @@ body {
     font-weight: 500;
     cursor: pointer;
     color: midnightblue;
-    background: rgb(153, 203, 230);
+    background: rgb(157, 200, 233);
     border: 1px solid black;
     transition: all 0.3s ease;
     padding: clamp(0.5rem, 1.5vw, 0.75rem);
@@ -176,6 +176,7 @@ body {
     background: rgb(95, 176, 219);
     transform: scale(1.05);
     z-index: 10;
+    box-shadow: 0 2px 8px midnightblue;
 }
 
 .calendar-day.other-month {
@@ -184,16 +185,16 @@ body {
 }
 
 .calendar-day.today {
-    background: navy;
-    border: 2px lightblue solid;
+    background: rgb(100, 164, 233);
+    border: 2.5px solid midnightblue;
     color: white;
     font-weight: 500px;
-    box-shadow: 0 4px 15px mediumslateblue;
 }
 
 .calendar-day.selected {
-    border: 2px solid lightskyblue;
+    border: 2.5px solid rgb(38, 116, 225);
     background: midnightblue;
+    color: white;
 }
 
 .login-page{
