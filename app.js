@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const mysql =  require('mysql');
+const session = require('express-session');
 
 app.use(express.json());
 
@@ -11,6 +12,16 @@ app.use(express.static('public_html'));
 const bcrypt = require('bcrypt');
 //encryption will be 2^number of rounds
 const SALT_ROUNDS = 10;
+
+app.use(session({
+    secret: 'cs-marketplace-secret',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        maxAge: 1000*60*60 // 1 hour
+    },
+})
+);
 
 // Connect to database. Only works on approved IPs by server admin
 const db = mysql.createConnection(
@@ -31,7 +42,7 @@ db.connect(err =>
 });
 
 // Handle scheduling events (scheduleEvent.html)
-app.post('/schedule-event', (req, res) => 
+app.post('/schedule-event', requireLogin, (req, res) => 
 {
 	// Extracts information from req.body, assign them to seperate variables
     const { name, date, location, time, capacity } = req.body || {};
@@ -109,7 +120,7 @@ app.get('/calendar-events', (req, res) =>
 
 
 // Get event ID (for editing events)
-app.get('/events/:id', (req, res) =>
+app.get('/events/:id', requireAdmin, (req, res) =>
 {
 	// Sent from frontend; extract event ID from URL
 	const eventID = req.params.id;
@@ -137,7 +148,7 @@ app.get('/events/:id', (req, res) =>
 });
 
 // Handle editing events (by event ID)
-app.put('/events/:id', (req, res) =>
+app.put('/events/:id', requireAdmin, (req, res) =>
 {
 	// Sent from front end
 	const eventID = req.params.id;
@@ -174,7 +185,7 @@ app.put('/events/:id', (req, res) =>
 });
 
 // Handle deleting events (by event ID)
-app.delete('/events/:id', (req, res) =>
+app.delete('/events/:id', requireAdmin, (req, res) =>
 {
 	// Event ID from frontend
 	const eventID = req.params.id;
@@ -200,7 +211,7 @@ app.delete('/events/:id', (req, res) =>
 });
 
 //Specifically for admin, set permission after database setup
-app.get("/viewEventRequests", (req, res) =>
+app.get("/viewEventRequests", requireAdmin, (req, res) =>
 {
     //query database for pending event requests
     const sql = "SELECT request_id AS id, event_name AS name, event_date AS date, event_time AS time, event_location as location, event_capacity as capacity FROM EventRequests WHERE status = 'pending'";
@@ -216,7 +227,7 @@ app.get("/viewEventRequests", (req, res) =>
     });
 })
 //Specific to admin, set permission after database setup
-app.post("/approveEvent", (req, res) =>
+app.post("/approveEvent", requireAdmin, (req, res) =>
 {
     const eventID = req.body.eventID;
     //check if eventID is provided
@@ -265,7 +276,7 @@ app.post("/approveEvent", (req, res) =>
 })
 
 //Specific to admin, set permission after database setup
-app.post("/denyEvent", (req, res) =>
+app.post("/denyEvent", requireAdmin, (req, res) =>
 {
     const eventID = req.body.eventID;
     if (!eventID)
@@ -313,21 +324,7 @@ app.post("/login", (req, res) =>
             return res.status(401).json({message: "Invalid username or password."});
         }
         //assign current user
-        isAdmin = false;
         user_id = results[0].user_id;
-        const checkAdmin = "SELECT * FROM Admins WHERE user_id = ?";
-        db.query(checkAdmin, [user_id], (err, adminResults) =>
-        {
-            if (err)
-            {
-                console.error("Database error: ", err);
-                return res.status(500).json({message: "Error with database."});
-            }
-            if (adminResults.length > 0)
-            {
-                isAdmin = true;
-            }
-        });
         const user = results[0];
         //check encrypted password
         bcrypt.compare(password, user.password, (err, isMatch) =>
@@ -341,10 +338,36 @@ app.post("/login", (req, res) =>
             {
                 return res.status(401).json({message: "Invalid username or password."});
             }
+        const checkAdmin = "SELECT * FROM Admins WHERE user_id = ?";
+        db.query(checkAdmin, [user_id], (err, adminResults) =>
+        {
+            if (err)
+            {
+                console.error("Database error: ", err);
+                return res.status(500).json({message: "Error with database."});
+            }
+            const isAdmin = adminResults.length > 0;
+            //This is the session setup
+            req.session.user = {
+                id: user.user_id,
+                username: user.user_name,
+                name: user.name,
+                email: user.email,
+                isAdmin: isAdmin
+            };
+
+            //Response back to frontend
             return res.json({
                 message: "Login successful.",
-                isAdmin: isAdmin
-            });
+                isAdmin: isAdmin,
+                user: {
+                    id: user.user_id,
+                    username: user.user_name,
+                    name: user.name,
+                    email: user.email,
+                },
+            })
+        });
         });    
     });
 });
@@ -392,6 +415,53 @@ app.post("/signup", (req, res) => {
     });
 });
 
+//Setup current user
+app.get("/currentUser", (req, res) =>
+{
+    if (!req.session.user)
+    {
+        return req.status(401).json({loggedIn: false});
+    }
+    req.json({
+        loggedIn: true,
+        user: req.session.user
+    });
+});
+
+app.post("/logout", (req, res) =>
+{
+    req.session.destroy(err =>
+    {
+        if (err)
+        {
+            console.error("Logout error: ", err);
+            return res.status(500).send("Error logging out.");
+        }
+        res.clearCookie('connect.sid');//default cookie name
+        return res.json({message: "Logged out successfully"});
+    });
+});
+
+//only active user and admin can access the routes set for them
+//Setup access for users
+function requireLogin(req, res, next)
+{
+    if (!req.session.user)
+    {
+        return res.status(401).send("Unauthorized: Please log in.");
+    }
+    next();
+}
+
+//Setup access for admin
+function requireAdmin(req, res, next)
+{
+    if (!req.session.user || !req.session.user.isAdmin)
+    {
+        return res.status(403).send("Forbidden: Admins only.");
+    }
+    next();
+}
 // Start Express
 app.listen(80, () => console.log('Running on port 80'));
 
