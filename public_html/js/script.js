@@ -131,11 +131,15 @@ class Calendar {
 document.addEventListener('DOMContentLoaded', () => {
     // Load calender when page is loaded
     new Calendar();
-
     // View and schedule event buttons
 	const viewBtn = document.getElementById('viewBtn');
 	const scheduleBtn = document.getElementById('scheduleBtn');
+    const viewProfileBtn = document.getElementById('viewProfileBtn');
 
+    if (viewProfileBtn)
+    {
+        window.location.href = 'profile.html';
+    }
 	if (viewBtn)
 	{
 		viewBtn.addEventListener('click', () =>
