@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Your Profile</title>
+    <link rel="stylesheet" href="./css/styles.css">
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">CSC330 Project</div>
+            <div class="nav-buttons">
+                <button class="nav-btn" onclick="window.location.href='index.html'">Home</button>
+                <button class="nav-btn" onclick="window.location.href='chat.html'">Chat</button>
+                <button class="nav-btn" id="logoutBtn">Logout</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Profile Content -->
+    <div class="main-content">
+        <div class="profile-container">
+            <h1 class="profile-title">Your Profile</h1>
+
+            <div class="profile-card">
+                <div class="profile-field">
+                    <strong>Username:</strong>
+                    <span id="usernameValue">Loading...</span>
+                </div>
+
+                <div class="profile-field">
+                    <strong>Name:</strong>
+                    <span id="nameValue">Loading...</span>
+                </div>
+
+                <div class="profile-field">
+                    <strong>Email:</strong>
+                    <span id="emailValue">Loading...</span>
+                </div>
+
+                <div class="profile-field">
+                    <strong>Role:</strong>
+                    <span id="roleValue">Loading...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="profile.js"></script>
+</body>
+</html>
