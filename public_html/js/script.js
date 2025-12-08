@@ -289,6 +289,14 @@ document.addEventListener('DOMContentLoaded', () => {
 		});
 	}
 
+	if (profileBtn)
+	{
+		profileBtn.addEventListener('click', () =>
+		{
+			window.location.href = 'profile.html';
+		});
+	}
+
 	// Modal close functionality
 	const modal = document.getElementById('eventModal');
 	const closeBtn = document.querySelector('.modal-close');
