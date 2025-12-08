@@ -65,6 +65,31 @@ class Calendar {
         document.getElementById('joinBtn').addEventListener('click', () => {
             alert('tbd');
         });
+        const profileBtn = document.getElementById('profileBtn');
+        if (profileBtn) {
+            profileBtn.addEventListener('click', async() => {
+                try{
+                    const response = await fetch('/currentUser');
+                    if (!response.ok){
+                        window.location.href = 'login.html';
+                        return;
+                    }
+                    const data = await response.json();
+                    //if user is not logged in, redirect to login page
+                    if (!data.loggedIn){
+                        window.location.href = 'login.html';
+                        return;
+                    }
+                    // User is logged in, go to profile page
+                    window.location.href = 'profile.html';
+                }
+                //if any error occurs, redirect to login page
+                catch (err){
+                    console.error('Error checking login status:', err);
+                    window.location.href = 'login.html';
+                }
+            });
+        } 
     }
     // create the grid for the selected month
     renderCalendar() {
