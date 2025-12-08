@@ -50,6 +50,261 @@
                 </tbody>
             </table>
         </section>
+        
+    
+ <!-- Chat Widget Container -->
+<div id="chat-container">
+    
+    <div class="chat-widget">
+        <div class="chat-body">
+            <div class="messages"></div>
+            <div class="chat-input-container">
+                <input type="text" class="messageInput" placeholder="Type your message...">
+                <button class="sendButton">Send</button>
+            </div>
+        </div>
+    </div>
+
+    
+    <div class="chat-widget">
+        <div class="chat-body">
+            <div class="messages"></div>
+            <div class="chat-input-container">
+                <input type="text" class="messageInput" placeholder="Type your message...">
+                <button class="sendButton">Send</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
+<script>
+    // Firebase config - Using YOUR credentials
+    const firebaseConfig = {
+        apiKey: "AIzaSyCTW4X-as9kz7Lgn4F_DdPX4rJFMsr396k",
+        authDomain: "csc330-csmarketplace.firebaseapp.com",
+        projectId: "csc330-csmarketplace",
+        storageBucket: "csc330-csmarketplace.firebasestorage.app",
+        messagingSenderId: "508892749106",
+        appId: "1:508892749106:web:bb7b4ea8328628e0af0b2b"
+    };
+
+    // Initialize Firebase
+    const app = firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    // Wait for DOM to load
+    document.addEventListener('DOMContentLoaded', function() {
+        const chatWidgets = document.querySelectorAll('.chat-widget');
+        const messageInputs = document.querySelectorAll('.messageInput');
+        const sendButtons = document.querySelectorAll('.sendButton');
+        const messagesContainers = document.querySelectorAll('.messages');
+        
+        // Track if we're connected
+        let isConnected = false;
+        
+        // Test connection first
+        console.log("Testing Firebase connection...");
+        db.collection("testConnection").get().then(() => {
+            console.log("Firebase connection successful!");
+            isConnected = true;
+        }).catch((error) => {
+            console.error("Firebase connection error:", error);
+            alert("Firebase connection error. Check console.");
+        });
+        
+        // Send message from a specific widget
+        function sendMessage(widgetIndex) {
+            const message = messageInputs[widgetIndex].value.trim();
+            if (!message) return;
+            
+            console.log('Widget', widgetIndex + 1, 'sending:', message);
+            
+            // Save message to Firestore - using "chats" collection
+            db.collection("chats").add({
+                text: message,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                fromWidget: widgetIndex + 1,
+                sender: "User" + (widgetIndex + 1)
+            }).then((docRef) => {
+                console.log('Message saved with ID:', docRef.id);
+                messageInputs[widgetIndex].value = '';
+                messageInputs[widgetIndex].focus();
+            }).catch((error) => {
+                console.error('Error saving message:', error);
+                alert('Failed to send message: ' + error.message);
+            });
+        }
+        
+        // Setup send buttons
+        sendButtons.forEach((button, index) => {
+            button.addEventListener('click', () => sendMessage(index));
+        });
+        
+        // Setup enter key
+        messageInputs.forEach((input, index) => {
+            input.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') sendMessage(index);
+            });
+        });
+        
+        // Listen for ALL messages
+        db.collection("chats")
+            .orderBy('timestamp', 'asc')
+            .onSnapshot((snapshot) => {
+                console.log('New messages received:', snapshot.size);
+                
+                if (snapshot.empty) {
+                    console.log("No messages yet in database");
+                }
+                
+                // Update BOTH widgets with all messages
+                messagesContainers.forEach((container, widgetIndex) => {
+                    container.innerHTML = "";
+                    
+                    snapshot.forEach((doc) => {
+                        const message = doc.data();
+                        console.log("Message data:", message);
+                        
+                        const messageElement = document.createElement('div');
+                        
+                        // SIMPLE LOGIC:
+                        // If THIS widget sent the message -> blue bubble on RIGHT
+                        // If OTHER widget sent the message -> blue bubble on LEFT
+                        if (message.fromWidget === widgetIndex + 1) {
+                            // This widget's own message
+                            messageElement.className = 'message-bubble own';
+                            messageElement.textContent = message.text;
+                            console.log("Showing as OWN message in widget", widgetIndex + 1);
+                        } else {
+                            // Message from other widget
+                            messageElement.className = 'message-bubble other';
+                            messageElement.textContent = `Widget ${message.fromWidget}: ${message.text}`;
+                            console.log("Showing as OTHER message in widget", widgetIndex + 1);
+                        }
+                        
+                        container.appendChild(messageElement);
+                    });
+                    
+                    // Scroll to bottom
+                    container.scrollTop = container.scrollHeight;
+                });
+            }, (error) => {
+                console.error('Error in message listener:', error);
+                alert('Error receiving messages: ' + error.message);
+            });
+        
+        console.log('Chat system initialized');
+        
+        // Add a test button to debug
+        const testButton = document.createElement('button');
+        testButton.style.position = 'fixed';
+        testButton.style.top = '10px';
+        testButton.style.right = '10px';
+        testButton.style.zIndex = '1001';
+        testButton.addEventListener('click', () => {
+            console.log("Manual test send...");
+            db.collection("chats").add({
+                text: "TEST MESSAGE " + new Date().toLocaleTimeString(),
+                timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                fromWidget: 0,
+                sender: "TestBot"
+            }).then(() => {
+                console.log("Test message sent!");
+            }).catch(error => {
+                console.error("Test failed:", error);
+            });
+        });
+        document.body.appendChild(testButton);
+    });
+</script>
+
+<style>
+    #chat-container {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        display: flex;
+        gap: 20px;
+        z-index: 1000;
+    }
+
+    .chat-widget {
+        width: 300px;
+        background: white;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        font-family: Arial, sans-serif;
+    }
+
+    .messages {
+        height: 200px;
+        padding: 10px;
+        overflow-y: auto;
+        border-bottom: 1px solid #eee;
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .message-bubble {
+        max-width: 80%;
+        padding: 8px 12px;
+        border-radius: 18px;
+        word-wrap: break-word;
+        font-size: 14px;
+        background: #007bff !important;
+        color: white !important;
+    }
+
+    .message-bubble.own {
+        align-self: flex-end;
+        border-bottom-right-radius: 5px;
+    }
+
+    .message-bubble.other {
+        align-self: flex-start;
+        border-bottom-left-radius: 5px;
+    }
+
+    .chat-input-container {
+        display: flex;
+        padding: 10px;
+        gap: 8px;
+    }
+
+    .messageInput {
+        flex: 1;
+        padding: 8px 12px;
+        border: 1px solid #ddd;
+        border-radius: 20px;
+        outline: none;
+        font-size: 14px;
+    }
+
+    .messageInput:focus {
+        border-color: #007bff;
+    }
+
+    .sendButton {
+        background: #007bff;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 20px;
+        cursor: pointer;
+        font-size: 14px;
+    }
+
+    .sendButton:hover {
+        background: #0056b3;
+    }
+</style>
+        
+                                      
 
 		<!-- Displays events with option to edit and delete -->
 		<section class="events-section" id="eventsSection" style="display:none;">
@@ -60,6 +315,7 @@
     </main>
     <script src="./js/adminactions.js"></script>
     <script src="./js/admin.js"></script>
+    
 </body>
 </html>
 
