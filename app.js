@@ -17,7 +17,7 @@ const db = mysql.createConnection(
 {
 
 	host: '34.23.144.80',
-	user: 'jared',
+	user: 'cameron',
 	password: '@Password1',
 	database: 'CSMarketplace'
 	 	
@@ -77,6 +77,36 @@ app.get('/events', (req, res) =>
 		res.json(rows);	
 	});
 });
+
+// Get approved events for calendar display with RSVP counts
+app.get('/calendar-events', (req, res) => 
+{
+	// Get approved events with RSVP counts
+	const sql = `SELECT 
+		e.event_name, 
+		e.event_date, 
+		e.event_location, 
+		e.event_time, 
+		e.event_capacity,
+		COALESCE(COUNT(r.rsvp_id), 0) AS rsvp_count
+	FROM Events e
+	LEFT JOIN RSVPs r ON e.event_id = r.event_id
+	GROUP BY e.event_id, e.event_name, e.event_date, e.event_location, e.event_time, e.event_capacity
+	ORDER BY e.event_date ASC, e.event_time ASC`;
+
+	// Fetch events from database, error if unsuccessful
+	db.query(sql, (err, rows) => 
+	{
+		if (err)
+		{
+			console.error('Error fetching calendar events from database: ', err);
+			return res.status(500).send('Error with database');
+		}
+		// Package data into JSON for use by frontend
+		res.json(rows);	
+	});
+});
+
 
 // Get event ID (for editing events)
 app.get('/events/:id', (req, res) =>
