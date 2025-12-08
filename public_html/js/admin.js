@@ -95,3 +95,149 @@ async function viewEventRequests() {
             alert("Error loading event requests. Please try again later.")
     }
 }
+
+// Admin view events
+
+// View event button actions
+const viewEventsBtn = document.getElementById("viewEventsBtn");
+if (viewEventsBtn)
+{
+    viewEventsBtn.addEventListener("click", () => 
+    {
+        // Display in same section used for event requests
+        const requestsSection = document.getElementById("requestsSection");
+        if (requestsSection) 
+        {
+            requestsSection.style.display = "block";
+
+            // Changed heading text
+            const heading = requestsSection.querySelector("h2");
+            if (heading) 
+            {
+                heading.textContent = "Events";
+            }
+        }
+
+        // Load events from /events
+        viewEvents();
+    });
+
+    // Add hover animation, same as event requests button
+    if (typeof anime !== 'undefined') 
+    {
+        viewEventsBtn.addEventListener('mouseenter', () => 
+        {
+            anime(
+            {
+                targets: viewEventsBtn,
+                scale: [1, 1.05],
+                duration: 300,
+                easing: 'easeOutQuad'
+            });
+        });
+
+        viewEventsBtn.addEventListener('mouseleave', () => 
+        {
+            anime(
+            {
+                targets: viewEventsBtn,
+                scale: [1.05, 1],
+                duration: 300,
+                easing: 'easeOutQuad'
+            });
+        });
+    }
+}
+
+// View events with edit/delete functionality
+async function viewEvents() 
+{
+    try 
+    {
+        const response = await fetch("/events");
+        if (!response.ok)
+        {
+            throw new Error("Failed to load events.");
+        }
+
+        const events = await response.json();
+
+        // Same body as event requests
+        const tbody = document.getElementById("requestsTableBody");
+        if (!tbody) return;
+
+        // Clear existing rows
+        tbody.innerHTML = "";
+
+        // If no events found
+        if (!events || events.length === 0) 
+        {
+            const tr = document.createElement("tr");
+            tr.innerHTML = '<td colspan="7">No events found.</td>';
+            tbody.appendChild(tr);
+            return;
+        }
+
+        // Create rows (same format as event requests)
+        for (let i = 0; i < events.length; i++) 
+        {
+            const event = events[i];
+            const tr = document.createElement("tr");
+
+            // ID used to remove row after delete as needed
+            tr.id = "event-" + event.event_id;
+
+            tr.innerHTML =
+                `<td>${event.event_id}</td>
+                 <td>${event.event_name}</td>
+                 <td>${event.event_date}</td>
+                 <td>${event.event_time}</td>
+                 <td>${event.event_location}</td>
+                 <td>${event.event_capacity}</td>
+                 <td>
+                     <button class="primary-btn" onclick="editEvent(${event.event_id})">Edit</button>
+                     <button class="primary-btn" onclick="deleteEvent(${event.event_id})">Delete</button>
+                 </td>`;
+
+            tbody.appendChild(tr);
+        }
+    } 
+    catch (err) 
+    {
+        console.error(err);
+        alert("Error loading events. Please try again later.");
+    }
+}
+
+// Edit button actions
+function editEvent(id) 
+{
+    window.location.href = "editEvent.html?id=" + id;
+}
+
+// Delete button actions
+async function deleteEvent(id) {
+    const confirmed = confirm("Are you sure you want to delete this event?");
+    if (!confirmed) return;
+
+    try 
+    {
+        const response = await fetch("/events/" + id, { method: "DELETE" });
+        if (!response.ok) 
+        {
+            throw new Error("Failed to delete event.");
+		}
+
+        // Remove row without reloading page
+        const row = document.getElementById("event-" + id);
+        if (row) 
+        {
+            row.remove();
+        }
+    } 
+    catch (err) 
+    {
+        console.error(err);
+        alert("Error deleting event. Please try again later.");
+    }
+}
