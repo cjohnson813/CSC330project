@@ -480,14 +480,24 @@ app.post("/signup", (req, res) => {
             }
             //Insert new user into database
             const insertUserSql = "INSERT INTO Users (name, user_name, password, phone, email) VALUES (?, ?, ?, ?, ?)";
-            db.query(insertUserSql, [fullName, username, hashedPassword, phone, email], (err) =>
+            db.query(insertUserSql, [fullName, username, hashedPassword, phone, email], (err, result) =>
             {
                 if (err)
                 {
                     console.error("Database error: ", err);
                     return res.status(500).send("Error creating user.");
                 }
-                res.send("Signup successful.");
+                //Auto login after signup
+                const isAdmin = false;
+                const newUserId = result.insertId;
+                req.session.user = {
+                    id: newUserId,
+                    username: username,
+                    name: fullName,
+                    email: email,
+                    isAdmin: isAdmin
+                };
+                res.json({message: "Signup successful.", isAdmin: isAdmin, user: req.session.user});
             });
         });
     });

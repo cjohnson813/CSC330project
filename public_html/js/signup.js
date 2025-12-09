@@ -32,9 +32,13 @@ async function signupUser(event)
         });
         if (!response.ok){
         const errorMsg = await response.text();
-        throw new Error(errorMsg);          
+        throw new Error(errorMsg || "Signup failed.");          
         }
-        document.getElementById("statusMsg").innerText = await response.text(); 
+        const data = await response.json();
+        const statusMsg = document.getElementById("statusMsg");
+        if (statusMsg){
+            statusMsg.innerText = data.message || "Signup successful.";
+        }
         window.location.href = "index.html";
     }
     catch (err)
