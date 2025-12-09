@@ -29,7 +29,7 @@ const db = mysql.createConnection(
 {
 
 	host: '34.23.144.80',
-	user: 'cameron',
+	user: 'jared',
 	password: '@Password1',
 	database: 'CSMarketplace'
 	 	
@@ -100,7 +100,7 @@ app.get('/calendar-events', (req, res) =>
 		e.event_location, 
 		e.event_time, 
 		e.event_capacity,
-		COALESCE(COUNT(r.rsvp_id), 0) AS rsvp_count
+		COALESCE(COUNT(r.user_id), 0) AS rsvp_count
 	FROM Events e
 	LEFT JOIN RSVPs r ON e.event_id = r.event_id
 	GROUP BY e.event_id, e.event_name, e.event_date, e.event_location, e.event_time, e.event_capacity
@@ -210,6 +210,82 @@ app.delete('/events/:id', requireAdmin, (req, res) =>
 		res.send('Event deleted successfully')
 	});	
 });
+
+// Handle RSVP functionality (must be logged in)
+app.post('/events/:id/rsvp', requireLogin, (req, res) =>
+{
+    const eventID = req.params.id;
+    const userID = req.session.user.id;
+
+    if (!eventID) {
+        return res.status(400).send("Missing event ID.");
+    }
+
+    // Because RSVPs Primary Key is (user_id, event_id), this prevents duplicates
+    const sql = "INSERT INTO RSVPs (user_id, event_id) VALUES (?, ?)";
+
+    db.query(sql, [userID, eventID], (err) =>
+    {
+        if (err) 
+        {
+            // Handle duplicate RSVP
+            if (err.code === 'ER_DUP_ENTRY') 
+            {
+                return res.status(409).send("You have already RSVP'd to this event.");
+            }
+
+            console.error("Database error (RSVP): ", err);
+            return res.status(500).send("Error saving RSVP.");
+        }
+
+        res.send("RSVP recorded successfully.");
+    });
+});
+
+// Handle User Profile
+app.get('/profile', requireLogin, (req, res) =>
+{
+    const user = req.session.user;
+    const userID = user.id;
+
+    // Get events user has RSVP'd to
+    const sql = 
+   		`SELECT
+	        e.event_id,
+	        e.event_name,
+	        e.event_date,
+	        e.event_location,
+	        e.event_time,
+	        e.event_capacity
+        FROM RSVPs r
+        JOIN Events e ON r.event_id = e.event_id
+        WHERE r.user_id = ?
+        ORDER BY e.event_date ASC, e.event_time ASC`;
+
+    db.query(sql, [userID], (err, rows) =>
+    {
+        if (err) 
+        {
+            console.error("Database error (profile RSVPs): ", err);
+            return res.status(500).send("Error retrieving profile data.");
+        }
+
+        // Handle both user details and RSVP'd events
+        res.json(
+        {
+            user: 
+            {
+                id: user.id,
+                username: user.username,
+                name: user.name,
+                email: user.email,
+                phone: user.phone
+            },
+            events: rows
+        });
+    });
+});
+
 
 //Specifically for admin, set permission after database setup
 app.get("/viewEventRequests", requireAdmin, (req, res) =>
@@ -354,6 +430,7 @@ app.post("/login", (req, res) =>
                 username: user.user_name,
                 name: user.name,
                 email: user.email,
+                phone: user.phone,
                 isAdmin: isAdmin
             };
 

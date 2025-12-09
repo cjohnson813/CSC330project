@@ -21,8 +21,19 @@ document.addEventListener('DOMContentLoaded', async () =>
                     '<p>Date: ' + event.event_date.toString().split('T')[0] + '</p>' + // Remove extra date characters
                     '<p>Location: ' + event.event_location + '</p>' +
                     '<p>Start Time: ' + event.event_time + '</p>' +
-                    '<p>Capacity: ' + event.event_capacity + '</p>' +
-                    '<hr>'; // Horizontal line to seperate events
+                    '<p>Capacity: ' + event.event_capacity + '</p>';
+
+				// RSVP Button
+                const rsvpBtn = document.createElement('button');
+                rsvpBtn.innerText = 'RSVP';
+                rsvpBtn.classList.add('nav-btn'); // Match button style
+                rsvpBtn.style.margin = "10px"; // Spacing to prevent overcrowding
+                rsvpBtn.onclick = () => rsvpToEvent(event.event_id);
+				item.appendChild(rsvpBtn);
+				
+				// Add horizontal line between events
+				item.appendChild(document.createElement('hr'));
+				// Next event
                 eventList.appendChild(item);
             });
         } 
@@ -42,3 +53,25 @@ document.addEventListener('DOMContentLoaded', async () =>
         window.location.href = 'index.html';
     });
 });
+
+// Handle RSVP button clicks
+async function rsvpToEvent(eventID)
+{
+    try
+    {
+        const res = await fetch(`/events/${eventID}/rsvp`, { method: 'POST' });
+        const text = await res.text();
+
+        if (!res.ok)
+        {
+            alert(text);   // Handle errors (user not logged in or similar)
+            return;
+        }
+
+        alert(text); // Successful RSVP
+    }
+    catch (err)
+    {
+        alert("Error sending RSVP. Please try again later.");
+    }
+}

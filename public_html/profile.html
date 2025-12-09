@@ -1,53 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <title>Your Profile</title>
-    <link rel="stylesheet" href="./css/styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Profile</title>
+  <link rel="stylesheet" href="css/styles.css">
 </head>
 
 <body>
-    <!-- Header -->
-    <header class="header">
-        <div class="header-content">
-            <div class="logo">CSC330 Project</div>
-            <div class="nav-buttons">
-                <button class="nav-btn" onclick="window.location.href='index.html'">Home</button>
-                <button class="nav-btn" onclick="window.location.href='chat.html'">Chat</button>
-                <button class="nav-btn" id="logoutBtn">Logout</button>
-            </div>
-        </div>
-    </header>
 
-    <!-- Main Profile Content -->
-    <div class="main-content">
-        <div class="profile-container">
-            <h1 class="profile-title">Your Profile</h1>
-
-            <div class="profile-card">
-                <div class="profile-field">
-                    <strong>Username:</strong>
-                    <span id="usernameValue">Loading...</span>
-                </div>
-
-                <div class="profile-field">
-                    <strong>Name:</strong>
-                    <span id="nameValue">Loading...</span>
-                </div>
-
-                <div class="profile-field">
-                    <strong>Email:</strong>
-                    <span id="emailValue">Loading...</span>
-                </div>
-
-                <div class="profile-field">
-                    <strong>Role:</strong>
-                    <span id="roleValue">Loading...</span>
-                </div>
-            </div>
-        </div>
+  <header class="header">
+    <div class="header-content">
+      <div class="logo">CSMarketplace</div>
+      <div class="nav-buttons">
+        <button class="nav-btn" onclick="window.location.href='index.html'">Home</button>
+        <button class="nav-btn" onclick="window.location.href='viewEvents.html'">View Events</button>
+        <button class="nav-btn" onclick="window.location.href='scheduleEvent.html'">Schedule Event</button>
+        <button class="nav-btn" onclick="window.location.href='profile.html'">My Profile</button>
+      </div>
     </div>
+  </header>
 
-    <script src="./js/profile.js"></script>
+  <div class="login-page">
+    <div class="login-container" style="width: 500px; text-align: left;">
+
+      <h1 style="text-align:center; margin-bottom: 20px;">My Profile</h1>
+
+      <div id="userInfo" class="event-item" style="margin-bottom: 20px;">
+        <h3>Account Details</h3>
+        <p><strong>Username:</strong> <span id="profileUsername"></span></p>
+        <p><strong>Name:</strong> <span id="profileName"></span></p>
+        <p><strong>Email:</strong> <span id="profileEmail"></span></p>
+        <p><strong>Phone:</strong> <span id="profilePhone"></span></p>
+      </div>
+
+      <h2 style="text-align:center; margin-bottom: 20px;">My RSVP'd Events</h2>
+
+      <div id="rsvpList" style="margin-bottom: 20px;"></div>
+
+      <p id="statusMessage" class="status-message"></p>
+
+      <button class="nav-btn" style="width:100%; margin-bottom: 10px;"
+              onclick="window.location.href='index.html'">
+        Back to Home
+      </button>
+
+      <button class="nav-btn" id="logoutBtn" style="width:100%;">Logout</button>
+
+    </div>
+  </div>
+
+  <script src="js/profile.js"></script>
+
 </body>
+
 </html>
