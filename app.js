@@ -17,6 +17,7 @@ app.use(session({
     secret: 'cs-marketplace-secret',
     resave: false,
     saveUninitialized: false,
+    //maximum age of each session is 1 hour
     cookie: {
         maxAge: 1000*60*60 // 1 hour
     },
@@ -400,7 +401,7 @@ app.post("/login", (req, res) =>
             return res.status(401).json({message: "Invalid username or password."});
         }
         //assign current user
-        user_id = results[0].user_id;
+        const user_id = results[0].user_id;
         const user = results[0];
         //check encrypted password
         bcrypt.compare(password, user.password, (err, isMatch) =>
@@ -499,7 +500,7 @@ app.get("/currentUser", (req, res) =>
     {
         return req.status(401).json({loggedIn: false});
     }
-    req.json({
+    return res.json({
         loggedIn: true,
         user: req.session.user
     });
