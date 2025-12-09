@@ -26,7 +26,7 @@ async function signupUser(event)
         body: JSON.stringify({fullName: fullNameInput,
             username: userNameInput, 
             password: passwordInput, 
-            phoneNumber: phoneNumberInput, 
+            phone: phoneNumberInput, 
             email: emailInput, 
             github: githubInput})
         });
