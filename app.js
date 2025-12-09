@@ -453,7 +453,7 @@ app.post("/login", (req, res) =>
 app.post("/signup", (req, res) => {
     //use || {} to prevent errors if body is undefined
     const {fullName, username, password, phone, email, github} = req.body || {};
-    if (!fullName || !username || !password || !phoneNumber || !email) {
+    if (!fullName || !username || !password || !phone || !email) {
         return  res.status(400).send("Missing required fields.");
     }
     //check if username already exists
